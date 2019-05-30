@@ -32,7 +32,7 @@ REPLACEMENTS = [
     ("&#8226;", "-")]
 
 
-def ENMLToHTML(content, store, pretty=True, header=True, **kwargs):
+def enml_to_html(content, store, pretty=True, header=True, **kwargs):
     """
     converts ENML string into HTML string
     :param header: If True, note is wrapped in a <HTML><BODY> block.
@@ -82,9 +82,9 @@ def ENMLToHTML(content, store, pretty=True, header=True, **kwargs):
     return content
 
 
-def ENMLToTex(content, store, pretty=True, header=True):
+def enml_to_tex(content, store, pretty=True, header=True):
     """
-    converts ENML string into HTML string then converts HTML string to plain text
+    converts ENML string into HTML string then converts HTML string to LaTex format
     :param header: If True, note is wrapped in a <HTML><BODY> block.
     :type header: bool
     :param media_filter: optional callable object used to filter undesired resources.
@@ -94,7 +94,7 @@ def ENMLToTex(content, store, pretty=True, header=True):
     text_maker = html2tex.HTML2Tex()
     text_maker.images_as_html = True
 
-    html = ENMLToHTML(content, store, pretty, header, media_filter=images_media_filter).decode('utf-8')
+    html = enml_to_html(content, store, pretty, header, media_filter=images_media_filter).decode('utf-8')
     text = text_maker.handle(html)
     for entity, replacement in REPLACEMENTS:
         text = text.replace(entity, replacement)

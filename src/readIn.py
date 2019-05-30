@@ -1,5 +1,5 @@
 import xml.etree.ElementTree as ET
-from src.enml_reader import ENMLToTex, MediaStore
+from src.enml_reader import enml_to_tex, MediaStore
 from shutil import copyfile
 
 def get_updated_date_if_exists(child):
@@ -72,7 +72,7 @@ if __name__ == "__main__":
                 mediaStore.commit_to_memory(resource.find("data").text)
 
             f.write(make_new_entry(created, title, updated))
-            f.write(ENMLToTex(child.find("content").text, mediaStore))
+            f.write(enml_to_tex(child.find("content").text, mediaStore))
             f.write(make_tag_footer(tags))
 
         f.write(foot)
