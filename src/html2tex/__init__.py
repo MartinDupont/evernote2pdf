@@ -8,6 +8,7 @@ from textwrap import wrap
 
 from src.html2tex import config
 from src.html2tex.compat import HTMLParser, urlparse
+from src.html2tex.format_latex import make_picture_link
 from src.html2tex.utils import (
     dumb_css_parser,
     element_style,
@@ -477,58 +478,16 @@ class HTML2Tex(HTMLParser.HTMLParser):
                     attrs["href"] = attrs["src"]
                 alt = attrs.get("alt") or self.default_image_alt
 
+                self.o(make_picture_link(attrs["src"], alt))
+
                 # If we have images_with_size, write raw html including width,
                 # height, and alt attributes
-                if self.images_as_html or (
-                        self.images_with_size and ("width" in attrs or "height" in attrs)
-                ):
-                    self.o("<img src='" + attrs["src"] + "' ")
-                    if "width" in attrs:
-                        self.o("width='" + attrs["width"] + "' ")
-                    if "height" in attrs:
-                        self.o("height='" + attrs["height"] + "' ")
-                    if alt:
-                        self.o("alt='" + alt + "' ")
-                    self.o("/>")
-                    return
+                #if "width" in attrs:
+                #    self.o("width='" + attrs["width"] + "' ")
+                #if "height" in attrs:
+                #    self.o("height='" + attrs["height"] + "' ")
+                return
 
-                # If we have a link to create, output the start
-                if self.maybe_automatic_link is not None:
-                    href = self.maybe_automatic_link
-                    if (
-                            self.images_to_alt
-                            and escape_md(alt) == href
-                            and self.absolute_url_matcher.match(href)
-                    ):
-                        self.o("<" + escape_md(alt) + ">")
-                        self.empty_link = False
-                        return
-                    else:
-                        self.o("[")
-                        self.maybe_automatic_link = None
-                        self.empty_link = False
-
-                # If we have images_to_alt, we discard the image itself,
-                # considering only the alt text.
-                if self.images_to_alt:
-                    self.o(escape_md(alt))
-                else:
-                    self.o("![" + escape_md(alt) + "]")
-                    if self.inline_links:
-                        href = attrs.get("href") or ""
-                        self.o(
-                            "(" + escape_md(urlparse.urljoin(self.baseurl, href)) + ")"
-                        )
-                    else:
-                        i = self.previousIndex(attrs)
-                        if i is not None:
-                            attrs = self.a[i]
-                        else:
-                            self.acount += 1
-                            attrs["count"] = self.acount
-                            attrs["outcount"] = self.outcount
-                            self.a.append(attrs)
-                        self.o("[" + str(attrs["count"]) + "]")
 
         if tag == "dl" and start:
             self.p()

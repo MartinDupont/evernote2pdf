@@ -1,15 +1,20 @@
 from enum import Enum
 
-def makePictureLink(filepath, caption="", label = ""):
-    template = """
-        \\begin{{figure}}[h!]
-        \includegraphics[width=\linewidth]{}
-        \caption{}
-        \label{}
-        \end{{figure}}
-    """
 
-    return template.format(filepath, caption, label)
+def make_picture_link(filepath, caption="", label=""):
+
+    result = """\\begin{{figure}}[h!]
+    \\includegraphics[width=\\linewidth]{{{}}}
+    """.format(filepath)
+
+    if caption:
+        result += "\\caption{{{}}}".format(caption)
+    if label:
+        result += "??\\label{{{}}}".format(label)
+    result += "\\end{{figure}}"
+
+    return result
+
 
 def makeTextBlock(text):
     return text
