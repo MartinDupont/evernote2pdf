@@ -26,7 +26,9 @@ def make_tag_footer(tags):
         return ""
 
     return """
+    \\vspace{{5mm}}
     \\hrule
+    \\vspace{{5mm}}
     Tags: {}
     """.format(tags)
 
@@ -57,21 +59,21 @@ if __name__ == "__main__":
 
     head, foot = get_template_head_and_foot("../latex/diary.tex")
 
-    f = open("../out/diary.tex", "w")
-    f.write(head)
+    with open("../out/diary.tex", "w") as f:
+        f.write(head)
 
-    for child in root:
-        title = child.find("title").text
-        created = parse_date_string(child.find("created").text)
-        updated = get_updated_date_if_exists(child)
-        tags = get_elements(child, "tag")
-        resources = child.findall("resource")
-        for resource in resources:
-            mediaStore.commit_to_memory(resource.find("data").text)
+        for child in root:
+            title = child.find("title").text
+            created = parse_date_string(child.find("created").text)
+            updated = get_updated_date_if_exists(child)
+            tags = get_elements(child, "tag")
+            resources = child.findall("resource")
+            for resource in resources:
+                mediaStore.commit_to_memory(resource.find("data").text)
 
-        f.write(make_new_entry(created, title, updated))
-        f.write(ENMLToTex(child.find("content").text, mediaStore))
-        f.write(make_tag_footer(tags))
+            f.write(make_new_entry(created, title, updated))
+            f.write(ENMLToTex(child.find("content").text, mediaStore))
+            f.write(make_tag_footer(tags))
 
-    f.write(foot)
-    f.close()
+        f.write(foot)
+        f.close()
