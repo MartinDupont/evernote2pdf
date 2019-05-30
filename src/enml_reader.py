@@ -3,8 +3,8 @@
 """Stole this from: https://github.com/CarlLee/ENML_PY, MIT license applies. """
 import os
 from bs4 import BeautifulSoup
-import html2text
-import re
+import html2tex
+
 MIME_TO_EXTESION_MAPPING = {
     'image/png': '.png',
     'image/jpg': '.jpg',
@@ -97,7 +97,7 @@ def ENMLToText(content, pretty=True, header=True, **kwargs):
     Returns True if the resource must be kept in HTML, False otherwise.
     :type media_fiter: callable object with prototype: `bool func(hash_str, mime_type)`
     """
-    text_maker = html2text.HTML2Text()
+    text_maker = html2tex.HTML2Text()
     text_maker.images_as_html = True
 
     html = ENMLToHTML(content, pretty, header).decode('utf-8')
