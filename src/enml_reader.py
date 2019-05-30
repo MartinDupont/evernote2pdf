@@ -107,9 +107,9 @@ class MediaStore:
         self.dataStore = {}
 
     def commit_to_memory(self, data):
-        bytes = binascii.a2b_base64(data)
-        hash = hashlib.md5(bytes).hexdigest()
-        self.dataStore[hash] = data
+        bytestring = binascii.a2b_base64(data)
+        hashed = hashlib.md5(bytestring).hexdigest()
+        self.dataStore[hashed] = data
 
     def save(self, hash_str, mime_type):
         """
@@ -118,12 +118,13 @@ class MediaStore:
         if not os.path.exists(self.path):
             os.makedirs(self.path)
         data = self.dataStore[hash_str]
-        bytes = binascii.a2b_base64(data)
+        bytestring = binascii.a2b_base64(data)
         file_path = self.path + '/'  + hash_str + MIME_TO_EXTESION_MAPPING[mime_type]
         f = open(file_path, "wb")
-        f.write(bytes)
+        f.write(bytestring)
         f.close()
         return file_path
+
 
 def images_media_filter(hash_str, mime_type):
     """Helper usable with `ENMLToHTML` `media_filter` parameter to filter-out

@@ -2,6 +2,7 @@ import xml.etree.ElementTree as ET
 from src.enml_reader import enml_to_tex, MediaStore
 from shutil import copyfile
 
+
 def get_updated_date_if_exists(child):
     updated = child.find("updated")
     if updated is not None:
@@ -14,12 +15,13 @@ def get_elements(child, search):
     return ", ".join(hits)
 
 
-def parse_date_string(dateString):
-    year = dateString[0:4]
-    month = dateString[4:6]
-    day = dateString[6:8]
+def parse_date_string(date_string):
+    year = date_string[0:4]
+    month = date_string[4:6]
+    day = date_string[6:8]
 
     return "/".join([day, month, year])
+
 
 def make_tag_footer(tags):
     if not tags:
@@ -32,8 +34,10 @@ def make_tag_footer(tags):
     Tags: {}
     """.format(tags)
 
+
 def make_new_entry(created, title="", updated=""):
     return "\\doubledatedsection{{{}}}{{{}}}{{{}}}\n".format(created, title, updated)
+
 
 def get_template_head_and_foot(path):
     f = open(path, "r")
