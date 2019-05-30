@@ -82,7 +82,7 @@ def ENMLToHTML(content, store, pretty=True, header=True, **kwargs):
     return content
 
 
-def ENMLToText(content, store, pretty=True, header=True):
+def ENMLToTex(content, store, pretty=True, header=True):
     """
     converts ENML string into HTML string then converts HTML string to plain text
     :param header: If True, note is wrapped in a <HTML><BODY> block.
@@ -123,7 +123,7 @@ class MediaStore:
         f = open(file_path, "wb")
         f.write(bytes)
         f.close()
-        return "file://" + file_path
+        return file_path
 
 def images_media_filter(hash_str, mime_type):
     """Helper usable with `ENMLToHTML` `media_filter` parameter to filter-out

@@ -12,5 +12,5 @@
 
 
 \newcommand{\doubledatedsection}[3]{%
-\section[#1]{#2. #1  \hfill #3}%
+\section[#2]{#1. #2  \hfill #3}%
 }
