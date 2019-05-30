@@ -6,9 +6,9 @@ import re
 import sys
 from textwrap import wrap
 
-from html2text import config
-from html2text.compat import HTMLParser, urlparse
-from html2text.utils import (
+from src import config
+from src.compat import HTMLParser, urlparse
+from src.utils import (
     dumb_css_parser,
     element_style,
     escape_md,

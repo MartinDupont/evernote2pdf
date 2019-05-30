@@ -5,7 +5,7 @@ import re
 import subprocess
 import sys
 
-import html2text
+import src
 import pytest
 
 skip = object()
@@ -153,7 +153,7 @@ def generate_function_testdata():
 
 @pytest.mark.parametrize("fn,module_args", generate_module_testdata())
 def test_module(fn, module_args):
-    h = html2text.HTML2Text()
+    h = src.HTML2Text()
     h.fn = fn
 
     if module_args.pop("google_doc", False):
@@ -199,7 +199,7 @@ def test_command(fn, cmdline_args):
 @pytest.mark.parametrize("fn,func_args", generate_function_testdata())
 def test_function(fn, func_args):
     with open(fn) as inf:
-        actual = html2text.html2text(inf.read(), **func_args)
+        actual = src.html2text(inf.read(), **func_args)
     result = get_baseline(fn)
     assert result == actual
 
@@ -221,7 +221,7 @@ def test_tag_callback():
         if tag == "b":
             return True
 
-    h = html2text.HTML2Text()
+    h = src.HTML2Text()
     h.tag_callback = _skip_certain_tags
     ret = h.handle(
         'this is a <b>txt</b> and this is a <b class="skip">with text</b> and '
