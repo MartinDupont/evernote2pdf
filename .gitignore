@@ -12,3 +12,4 @@ env/
 .tox/
 htmlcov/
 venv
+out
