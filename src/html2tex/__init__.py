@@ -72,7 +72,6 @@ class HTML2Text(HTMLParser.HTMLParser):
         self.ignore_emphasis = config.IGNORE_EMPHASIS  # covered in cli
         self.bypass_tables = config.BYPASS_TABLES  # covered in cli
         self.ignore_tables = config.IGNORE_TABLES  # covered in cli
-        self.google_doc = False  # covered in cli
         self.ul_item_mark = "*"  # covered in cli
         self.emphasis_mark = "_"  # covered in cli
         self.strong_mark = "**"
@@ -316,23 +315,6 @@ class HTML2Text(HTMLParser.HTMLParser):
             self.maybe_automatic_link = None
             self.empty_link = False
 
-        if self.google_doc:
-            # the attrs parameter is empty for a closing tag. in addition, we
-            # need the attributes of the parent nodes in order to get a
-            # complete style description for the current element. we assume
-            # that google docs export well formed html.
-            parent_style = {}
-            if start:
-                if self.tag_stack:
-                    parent_style = self.tag_stack[-1][2]
-                tag_style = element_style(attrs, self.style_def, parent_style)
-                self.tag_stack.append((tag, attrs, tag_style))
-            else:
-                dummy, attrs, tag_style = (
-                    self.tag_stack.pop() if self.tag_stack else (None, {}, {})
-                )
-                if self.tag_stack:
-                    parent_style = self.tag_stack[-1][2]
 
         if hn(tag):
             self.p()
@@ -344,12 +326,7 @@ class HTML2Text(HTMLParser.HTMLParser):
                 return  # prevent redundant emphasis marks on headers
 
         if tag in ["p", "div"]:
-            if self.google_doc:
-                if start and google_has_height(tag_style):
-                    self.p()
-                else:
-                    self.soft_br()
-            elif self.astack and tag == "div":
+            if self.astack and tag == "div":
                 pass
             else:
                 self.p()
@@ -422,11 +399,6 @@ class HTML2Text(HTMLParser.HTMLParser):
             self.o(strike)
             if start:
                 self.stressed = True
-
-        if self.google_doc:
-            if not self.inheader:
-                # handle some font attributes, but leave headers clean
-                self.handle_emphasis(start, tag_style, parent_style)
 
         if tag in ["kbd", "code", "tt"] and not self.pre:
             self.o("`")  # TODO: `` `this` ``
@@ -572,16 +544,13 @@ class HTML2Text(HTMLParser.HTMLParser):
             if (not self.list) and (not self.lastWasList):
                 self.p()
             if start:
-                if self.google_doc:
-                    list_style = google_list_style(tag_style)
-                else:
-                    list_style = tag
+                list_style = tag
                 numbering_start = list_numbering_start(attrs)
                 self.list.append({"name": list_style, "num": numbering_start})
             else:
                 if self.list:
                     self.list.pop()
-                    if (not self.google_doc) and (not self.list):
+                    if not self.list:
                         self.o("\n")
             self.lastWasList = True
         else:
@@ -594,10 +563,7 @@ class HTML2Text(HTMLParser.HTMLParser):
                     li = self.list[-1]
                 else:
                     li = {"name": "ul", "num": 0}
-                if self.google_doc:
-                    nest_count = self.google_nest_count(tag_style)
-                else:
-                    nest_count = len(self.list)
+                nest_count = len(self.list)
                 # TODO: line up <ol><li>s > 9 correctly.
                 self.o("  " * nest_count)
                 if li["name"] == "ul":
@@ -693,15 +659,6 @@ class HTML2Text(HTMLParser.HTMLParser):
             self.abbr_data += data
 
         if not self.quiet:
-            if self.google_doc:
-                # prevent white space immediately after 'begin emphasis'
-                # marks ('**' and '_')
-                lstripped_data = data.lstrip()
-                if self.drop_white_space and not (self.pre or self.code):
-                    data = lstripped_data
-                if lstripped_data != "":
-                    self.drop_white_space = 0
-
             if puredata and not self.pre:
                 # This is a very dangerous call ... it could mess up
                 # all handling of &nbsp; when not handled properly
