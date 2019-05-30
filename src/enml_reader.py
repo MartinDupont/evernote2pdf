@@ -91,7 +91,7 @@ def ENMLToText(content, store, pretty=True, header=True):
     Returns True if the resource must be kept in HTML, False otherwise.
     :type media_fiter: callable object with prototype: `bool func(hash_str, mime_type)`
     """
-    text_maker = html2tex.HTML2Text()
+    text_maker = html2tex.HTML2Tex()
     text_maker.images_as_html = True
 
     html = ENMLToHTML(content, store, pretty, header, media_filter=images_media_filter).decode('utf-8')

@@ -108,14 +108,6 @@ def main():
         ),
     )
     p.add_argument(
-        "-g",
-        "--google-doc",
-        action="store_true",
-        dest="google_doc",
-        default=False,
-        help="convert an html-exported Google Document",
-    )
-    p.add_argument(
         "-d",
         "--dash-unordered-list",
         action="store_true",
@@ -284,7 +276,6 @@ def main():
     h.images_as_html = args.images_as_html
     h.images_to_alt = args.images_to_alt
     h.images_with_size = args.images_with_size
-    h.google_doc = args.google_doc
     h.hide_strikethrough = args.hide_strikethrough
     h.escape_snob = args.escape_snob
     h.bypass_tables = args.bypass_tables

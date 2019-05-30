@@ -39,7 +39,7 @@ __version__ = (2018, 1, 9)
 # Support decoded entities with UNIFIABLE.
 
 
-class HTML2Text(HTMLParser.HTMLParser):
+class HTML2Tex(HTMLParser.HTMLParser):
     def __init__(self, out=None, baseurl="", bodywidth=config.BODY_WIDTH):
         """
         Input parameters:
@@ -316,7 +316,7 @@ class HTML2Text(HTMLParser.HTMLParser):
             self.empty_link = False
 
 
-        if hn(tag):
+        if hn(tag): # Headers !
             self.p()
             if start:
                 self.inheader = True
@@ -652,7 +652,7 @@ class HTML2Text(HTMLParser.HTMLParser):
         self.br_toggle = "  "
 
     def o(self, data, puredata=0, force=0):
-        """
+        """handle_tag
         Deal with indentation and whitespace
         """
         if self.abbr_data is not None:
