@@ -74,8 +74,9 @@ class HTML2Tex(HTMLParser.HTMLParser):
         self.bypass_tables = config.BYPASS_TABLES  # covered in cli
         self.ignore_tables = config.IGNORE_TABLES  # covered in cli
         self.ul_item_mark = "*"  # covered in cli
-        self.emphasis_mark = "_"  # covered in cli
-        self.strong_mark = "**"
+        self.emphasis_opening = "\\textit{{"  # covered in cli
+        self.strong_opening = "\\textbf{{"
+        self.strikethrough_opening = "\\sout{{"
         self.single_line_break = config.SINGLE_LINE_BREAK  # covered in cli
         self.use_automatic_links = config.USE_AUTOMATIC_LINKS  # covered in cli
         self.hide_strikethrough = False  # covered in cli
@@ -85,8 +86,8 @@ class HTML2Tex(HTMLParser.HTMLParser):
         self.pad_tables = config.PAD_TABLES  # covered in cli
         self.default_image_alt = config.DEFAULT_IMAGE_ALT  # covered in cli
         self.tag_callback = None
-        self.open_quote = config.OPEN_QUOTE  # covered in cli
-        self.close_quote = config.CLOSE_QUOTE  # covered in cli
+        self.open_quote = "``" #config.OPEN_QUOTE  # covered in cli
+        self.close_quote = "''" #config.CLOSE_QUOTE  # covered in cli
 
         if out is None:
             self.out = self.outtextf
@@ -253,10 +254,10 @@ class HTML2Tex(HTMLParser.HTMLParser):
             if strikethrough:
                 self.quiet += 1
             if italic:
-                self.o(self.emphasis_mark)
+                self.o(self.emphasis_opening)
                 self.drop_white_space += 1
             if bold:
-                self.o(self.strong_mark)
+                self.o(self.strong_opening)
                 self.drop_white_space += 1
             if fixed:
                 self.o("`")
@@ -279,13 +280,13 @@ class HTML2Tex(HTMLParser.HTMLParser):
                     # empty emphasis, drop it
                     self.drop_white_space -= 1
                 else:
-                    self.o(self.strong_mark)
+                    self.o("}}")
             if italic:
                 if self.drop_white_space:
                     # empty emphasis, drop it
                     self.drop_white_space -= 1
                 else:
-                    self.o(self.emphasis_mark)
+                    self.o("}}")
             # space is only allowed after *all* emphasis marks
             if (bold or italic) and not self.emphasis:
                 self.o(" ")
@@ -306,18 +307,19 @@ class HTML2Tex(HTMLParser.HTMLParser):
 
         # first thing inside the anchor tag is another tag
         # that produces some output
+        # todo
         if (
                 start
                 and self.maybe_automatic_link is not None
                 and tag not in ["p", "div", "style", "dl", "dt"]
                 and (tag != "img" or self.ignore_images)
         ):
-            self.o("[")
+            self.o("[") #
             self.maybe_automatic_link = None
             self.empty_link = False
 
 
-        if hn(tag): # Headers !
+        if hn(tag): # Headers ! # todo
             self.p()
             if start:
                 self.inheader = True
@@ -326,39 +328,39 @@ class HTML2Tex(HTMLParser.HTMLParser):
                 self.inheader = False
                 return  # prevent redundant emphasis marks on headers
 
-        if tag in ["p", "div"]:
+        if tag in ["p", "div"]: # todo
             if self.astack and tag == "div":
                 pass
             else:
                 self.p()
 
         if tag == "br" and start:
-            if self.blockquote > 0:
-                self.o("  \n> ")
-            else:
-                self.o("  \n")
+            # if self.blockquote > 0:
+            #     self.o("  \n> ")
+            # else:
+            self.o("  \\newline")
 
         if tag == "hr" and start:
             self.p()
-            self.o("* * *")
+            self.o("\\hrule")
             self.p()
 
-        if tag in ["head", "style", "script"]:
+        if tag in ["head", "style", "script"]: # todo
             if start:
                 self.quiet += 1
             else:
                 self.quiet -= 1
 
-        if tag == "style":
+        if tag == "style": # todo
             if start:
                 self.style += 1
             else:
                 self.style -= 1
 
-        if tag in ["body"]:
+        if tag in ["body"]: # todo
             self.quiet = 0  # sites like 9rules.com never close <head>
 
-        if tag == "blockquote":
+        if tag == "blockquote": # todo
             if start:
                 self.p()
                 self.o("> ", 0, 1)
@@ -373,9 +375,9 @@ class HTML2Tex(HTMLParser.HTMLParser):
 
         if tag in ["em", "i", "u"] and not self.ignore_emphasis:
             if start and no_preceding_space(self):
-                emphasis = " " + self.emphasis_mark
+                emphasis = " " + self.emphasis_opening
             else:
-                emphasis = self.emphasis_mark
+                emphasis = "}}"
 
             self.o(emphasis)
             if start:
@@ -383,9 +385,9 @@ class HTML2Tex(HTMLParser.HTMLParser):
 
         if tag in ["strong", "b"] and not self.ignore_emphasis:
             if start and no_preceding_space(self):
-                strong = " " + self.strong_mark
+                strong = " " + self.strong_opening
             else:
-                strong = self.strong_mark
+                strong = "}}"
 
             self.o(strong)
             if start:
@@ -393,19 +395,19 @@ class HTML2Tex(HTMLParser.HTMLParser):
 
         if tag in ["del", "strike", "s"]:
             if start and no_preceding_space(self):
-                strike = " ~~"
+                strike = self.strikethrough_opening
             else:
-                strike = "~~"
+                strike = "}}"
 
             self.o(strike)
             if start:
                 self.stressed = True
 
-        if tag in ["kbd", "code", "tt"] and not self.pre:
-            self.o("`")  # TODO: `` `this` ``
+        if tag in ["kbd", "code", "tt"] and not self.pre: # todo
+            self.o("")
             self.code = not self.code
 
-        if tag == "abbr":
+        if tag == "abbr": # todo
             if start:
                 self.abbr_title = None
                 self.abbr_data = ""
@@ -429,7 +431,7 @@ class HTML2Tex(HTMLParser.HTMLParser):
             title = ' "{}"'.format(title) if title.strip() else ""
             self.o("]({url}{title})".format(url=escape_md(url), title=title))
 
-        if tag == "a" and not self.ignore_links:
+        if tag == "a" and not self.ignore_links: #todo
             if start:
                 if (
                         "href" in attrs
@@ -489,16 +491,16 @@ class HTML2Tex(HTMLParser.HTMLParser):
                 return
 
 
-        if tag == "dl" and start:
+        if tag == "dl" and start: #todo
             self.p()
-        if tag == "dt" and not start:
+        if tag == "dt" and not start: #todo
             self.pbr()
-        if tag == "dd" and start:
+        if tag == "dd" and start: #todo
             self.o("    ")
-        if tag == "dd" and not start:
+        if tag == "dd" and not start: #todo
             self.pbr()
 
-        if tag in ["ol", "ul"]:
+        if tag in ["ol", "ul"]: #todo
             # Google Docs create sub lists as top level lists
             if (not self.list) and (not self.lastWasList):
                 self.p()
@@ -515,7 +517,7 @@ class HTML2Tex(HTMLParser.HTMLParser):
         else:
             self.lastWasList = False
 
-        if tag == "li":
+        if tag == "li": #todo
             self.pbr()
             if start:
                 if self.list:
@@ -532,7 +534,7 @@ class HTML2Tex(HTMLParser.HTMLParser):
                     self.o(str(li["num"]) + ". ")
                 self.start = True
 
-        if tag in ["table", "tr", "td", "th"]:
+        if tag in ["table", "tr", "td", "th"]: #todo
             if self.ignore_tables:
                 if tag == "tr":
                     if start:
@@ -585,7 +587,7 @@ class HTML2Tex(HTMLParser.HTMLParser):
                 if tag in ["td", "th"] and start:
                     self.td_count += 1
 
-        if tag == "pre":
+        if tag == "pre": #todo
             if start:
                 self.startpre = True
                 self.pre = True
