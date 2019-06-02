@@ -13,3 +13,4 @@ env/
 htmlcov/
 venv
 out
+newer_notebook.enex
