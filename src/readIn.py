@@ -6,8 +6,8 @@ from shutil import copyfile
 def get_updated_date_if_exists(child):
     updated = child.find("updated")
     if updated is not None:
-        return "Updated:" + parse_date_string(updated.text)
-    return ""
+        return parse_date_string(updated.text)
+    return None
 
 
 def get_elements(child, search):
@@ -20,7 +20,7 @@ def parse_date_string(date_string):
     month = date_string[4:6]
     day = date_string[6:8]
 
-    return "/".join([day, month, year])
+    return year, month, day
 
 
 def make_tag_footer(tags):
@@ -35,8 +35,11 @@ def make_tag_footer(tags):
     """.format(tags)
 
 
-def make_new_entry(created, title="", updated=""):
-    return "\\doubledatedsection{{{}}}{{{}}}{{{}}}\n".format(created, title, updated)
+def make_new_entry(year, month, day, title=""):
+    return "\\doubledatedsection{{{}}}{{{}}}{{{}}}{{{}}}\n".format(year, month, day, title)
+
+def make_new_entry_with_updated(year, month, day, updated_year, updated_month, updated_day, title=""):
+    return "\\doubledatedsectionupdate{{{}}}{{{}}}{{{}}}{{{}}}{{{}}}{{{}}}{{{}}}\n".format(year, month, day, updated_year, updated_month, updated_day, title)
 
 
 def get_template_head_and_foot(path):
@@ -68,14 +71,17 @@ if __name__ == "__main__":
 
         for child in root:
             title = child.find("title").text
-            created = parse_date_string(child.find("created").text)
+            created_date = parse_date_string(child.find("created").text)
             updated = get_updated_date_if_exists(child)
             tags = get_elements(child, "tag")
             resources = child.findall("resource")
             for resource in resources:
                 mediaStore.commit_to_memory(resource.find("data").text)
 
-            f.write(make_new_entry(created, title, updated))
+            if updated is not None:
+                f.write(make_new_entry_with_updated(*created_date, *updated, title))
+            else:
+                f.write(make_new_entry(*created_date, title))
             f.write(enml_to_tex(child.find("content").text, mediaStore))
             f.write(make_tag_footer(tags))
 
