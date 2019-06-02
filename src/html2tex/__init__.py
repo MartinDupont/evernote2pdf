@@ -775,25 +775,11 @@ class HTML2Tex(HTMLParser.HTMLParser):
                 else:
                     return chr(name2cp(c))
 
-    def google_nest_count(self, style):
-        """
-        Calculate the nesting count of google doc lists
-
-        :type style: dict
-
-        :rtype: int
-        """
-        nest_count = 0
-        if "margin-left" in style:
-            nest_count = int(style["margin-left"][:-2]) // self.google_list_indent
-
-        return nest_count
-
     def optwrap(self, text):
         """
         Wrap all paragraphs in the provided text.
 
-        :type text: str
+        :typentityrefe text: str
 
         :rtype: str
         """

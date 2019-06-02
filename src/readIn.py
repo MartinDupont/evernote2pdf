@@ -27,10 +27,7 @@ def make_tag_footer(tags):
     if not tags:
         return ""
 
-    return """
-    \\makeTagFooter{{}}
-    Tags: {}
-    """.format(tags)
+    return "\\makeTagFooter{{}}\nTags: {}".format(tags)
 
 
 def make_title(child):
