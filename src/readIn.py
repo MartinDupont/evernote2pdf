@@ -28,12 +28,17 @@ def make_tag_footer(tags):
         return ""
 
     return """
-    \\vspace{{5mm}}
-    \\hrule
-    \\vspace{{5mm}}
+    \\makeTagFooter{{}}
     Tags: {}
     """.format(tags)
 
+
+def make_title(child):
+    title = child.find("title").text
+    if not title is None:
+        if not title in ["Untitled", "Unbenannte Notiz"]:
+            return title
+    return ""
 
 def make_new_entry(year, month, day, title=""):
     return "\\doubledatedsection{{{}}}{{{}}}{{{}}}{{{}}}\n".format(year, month, day, title)
@@ -70,7 +75,7 @@ if __name__ == "__main__":
         f.write(head)
 
         for child in root:
-            title = child.find("title").text
+            title = make_title(child)
             created_date = parse_date_string(child.find("created").text)
             updated = get_updated_date_if_exists(child)
             tags = get_elements(child, "tag")

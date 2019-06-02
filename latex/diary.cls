@@ -36,3 +36,9 @@
 \subsubsection[#7]{#1.#2.#3 #7}%
 \begin{flushright} updated: #4.#5.#6 \end{flushright}
 }
+
+\newcommand{\makeTagFooter}{
+\vspace{5mm}
+\noindent \rule{0.2\textwidth}{0.4pt}
+\newline
+}
