@@ -74,9 +74,9 @@ class HTML2Tex(HTMLParser.HTMLParser):
         self.bypass_tables = config.BYPASS_TABLES  # covered in cli
         self.ignore_tables = config.IGNORE_TABLES  # covered in cli
         self.ul_item_mark = "\\item"  # covered in cli
-        self.emphasis_opening = "\\textit{{"  # covered in cli
-        self.strong_opening = "\\textbf{{"
-        self.strikethrough_opening = "\\sout{{"
+        self.emphasis_opening = "\\textit{"  # covered in cli
+        self.strong_opening = "\\textbf{"
+        self.strikethrough_opening = "\\sout{"
         self.single_line_break = config.SINGLE_LINE_BREAK  # covered in cli
         self.use_automatic_links = config.USE_AUTOMATIC_LINKS  # covered in cli
         self.hide_strikethrough = False  # covered in cli
@@ -280,13 +280,13 @@ class HTML2Tex(HTMLParser.HTMLParser):
                     # empty emphasis, drop it
                     self.drop_white_space -= 1
                 else:
-                    self.o("}}")
+                    self.o("}")
             if italic:
                 if self.drop_white_space:
                     # empty emphasis, drop it
                     self.drop_white_space -= 1
                 else:
-                    self.o("}}")
+                    self.o("}")
             # space is only allowed after *all* emphasis marks
             if (bold or italic) and not self.emphasis:
                 self.o(" ")
@@ -382,7 +382,7 @@ class HTML2Tex(HTMLParser.HTMLParser):
                 else:
                     emphasis = self.emphasis_opening
             else:
-                emphasis = "}}"
+                emphasis = "}"
 
             self.o(emphasis)
             if start:
@@ -395,7 +395,7 @@ class HTML2Tex(HTMLParser.HTMLParser):
                 else:
                     strong = self.strong_opening
             else:
-                strong = "}}"
+                strong = "}"
 
             self.o(strong)
             if start:
@@ -405,7 +405,7 @@ class HTML2Tex(HTMLParser.HTMLParser):
             if start and no_preceding_space(self):
                 strike = self.strikethrough_opening
             else:
-                strike = "}}"
+                strike = "}"
 
             self.o(strike)
             if start:
