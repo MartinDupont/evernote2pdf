@@ -64,7 +64,7 @@ def get_template_head_and_foot(path):
 
 
 if __name__ == "__main__":
-    tree = ET.parse('../test/test_data.enex')
+    tree = ET.parse('../test/newer_notebook.enex')
     root = tree.getroot()
     mediaStore = MediaStore("../out")
     copyfile("../latex/diary.cls", "../out/diary.cls")

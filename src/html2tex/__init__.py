@@ -73,7 +73,7 @@ class HTML2Tex(HTMLParser.HTMLParser):
         self.ignore_emphasis = config.IGNORE_EMPHASIS  # covered in cli
         self.bypass_tables = config.BYPASS_TABLES  # covered in cli
         self.ignore_tables = config.IGNORE_TABLES  # covered in cli
-        self.ul_item_mark = "*"  # covered in cli
+        self.ul_item_mark = "\\item"  # covered in cli
         self.emphasis_opening = "\\textit{{"  # covered in cli
         self.strong_opening = "\\textbf{{"
         self.strikethrough_opening = "\\sout{{"
@@ -376,8 +376,11 @@ class HTML2Tex(HTMLParser.HTMLParser):
             return self.preceding_data and re.match(r"[^\s]", self.preceding_data[-1])
 
         if tag in ["em", "i", "u"] and not self.ignore_emphasis:
-            if start and no_preceding_space(self):
-                emphasis = " " + self.emphasis_opening
+            if start:
+                if no_preceding_space(self):
+                    emphasis = " " + self.emphasis_opening
+                else:
+                    emphasis = self.emphasis_opening
             else:
                 emphasis = "}}"
 
@@ -386,8 +389,11 @@ class HTML2Tex(HTMLParser.HTMLParser):
                 self.stressed = True
 
         if tag in ["strong", "b"] and not self.ignore_emphasis:
-            if start and no_preceding_space(self):
-                strong = " " + self.strong_opening
+            if start:
+                if no_preceding_space(self):
+                    strong = " " + self.strong_opening
+                else:
+                    strong = self.strong_opening
             else:
                 strong = "}}"
 
@@ -502,39 +508,21 @@ class HTML2Tex(HTMLParser.HTMLParser):
         if tag == "dd" and not start: #todo
             self.pbr()
 
-        if tag in ["ol", "ul"]: #todo
-            # Google Docs create sub lists as top level lists
-            if (not self.list) and (not self.lastWasList):
-                self.p()
+        if tag in ["ol", "ul"]:
             if start:
-                list_style = tag
-                numbering_start = list_numbering_start(attrs)
-                self.list.append({"name": list_style, "num": numbering_start})
-            else:
-                if self.list:
-                    self.list.pop()
-                    if not self.list:
-                        self.o("\n")
-            self.lastWasList = True
-        else:
-            self.lastWasList = False
-
-        if tag == "li": #todo
-            self.pbr()
-            if start:
-                if self.list:
-                    li = self.list[-1]
+                if tag == "ol":
+                    self.o("\\begin{enumerate}")
                 else:
-                    li = {"name": "ul", "num": 0}
-                nest_count = len(self.list)
-                # TODO: line up <ol><li>s > 9 correctly.
-                self.o("  " * nest_count)
-                if li["name"] == "ul":
-                    self.o(self.ul_item_mark + " ")
-                elif li["name"] == "ol":
-                    li["num"] += 1
-                    self.o(str(li["num"]) + ". ")
-                self.start = True
+                    self.o("\\begin{itemize}")
+            else:
+                if tag == "ol":
+                    self.o("\\end{enumerate}")
+                else:
+                    self.o("\\end{itemize}")
+
+        if tag == "li":
+            if start:
+                self.o(self.ul_item_mark + " ")
 
         if tag in ["table", "tr", "td", "th"]: #todo
             if self.ignore_tables:
