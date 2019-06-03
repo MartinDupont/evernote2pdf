@@ -80,7 +80,7 @@ if __name__ == "__main__":
             for resource in resources:
                 mediaStore.commit_to_memory(resource.find("data").text)
 
-            if updated is not None:
+            if (updated is not None) & (updated != created_date):
                 f.write(make_new_entry_with_updated(*created_date, *updated, title))
             else:
                 f.write(make_new_entry(*created_date, title))
