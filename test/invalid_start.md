@@ -1,3 +1,3 @@
-  1. The ol has an invalid start 
-  2. This should just be ignored 
+\begin{enumerate} \item The ol has an invalid start  \item This should just be
+ignored  \end{enumerate}
 

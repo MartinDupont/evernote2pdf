@@ -1,2 +1,2 @@
-[allas: Country Manager](http://thth)
+\urlorhyperlink{http://thth}{allas: Country Manager}
 

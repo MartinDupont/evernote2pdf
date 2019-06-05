@@ -1,2 +1,2 @@
-**Foo bar**
+\textbf{Foo bar}
 
