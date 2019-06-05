@@ -3,6 +3,18 @@
 \ProvidesClass{diary}[2019/05/30 My custom diary class]
 \RequirePackage{titlesec}
 \usepackage{tocloft}
+\usepackage{hyperref}
+\usepackage{float}
+
+
+\hypersetup{
+colorlinks=true,
+linkcolor=blue,
+filecolor=blue,
+urlcolor=blue,
+}
+
+\urlstyle{same}
 
 \setcounter{tocdepth}{4}
 \setcounter{secnumdepth}{3}
@@ -41,4 +53,12 @@
 \vspace{5mm}
 \noindent \rule{0.2\textwidth}{0.4pt}
 \newline
+}
+
+\newcommand{\urlorhyperlink}[2]{
+\ifx&#2&
+    \url{#1}
+\else
+    \href{#1}{#2}
+\fi
 }

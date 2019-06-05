@@ -3,3 +3,4 @@ pypandoc==1.4
 wheel==0.30.0
 flake8==3.5.0
 beautifulsoup4
+pytest

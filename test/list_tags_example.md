@@ -24,15 +24,11 @@ Bass
 Drums
 
     Nicko McBrain
+\begin{itemize} \item some item \item Some other item \item some item
+\end{itemize}
 
-  * some item
-  * Some other item
-  * some item
+\begin{enumerate} \item Some other item \item some item \item some item
+\end{enumerate}
 
-  1. Some other item
-  2. some item
-  3. some item
-
-  * something else here
-  * some item
+\begin{itemize} \item something else here \item some item \end{itemize}
 

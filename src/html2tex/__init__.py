@@ -63,7 +63,6 @@ class HTML2Tex(HTMLParser.HTMLParser):
         self.body_width = bodywidth  # covered in cli
         self.skip_internal_links = config.SKIP_INTERNAL_LINKS  # covered in cli
         self.inline_links = config.INLINE_LINKS  # covered in cli
-        self.protect_links = config.PROTECT_LINKS  # covered in cli
         self.google_list_indent = config.GOOGLE_LIST_INDENT  # covered in cli
         self.ignore_links = config.IGNORE_ANCHORS  # covered in cli
         self.ignore_images = config.IGNORE_IMAGES  # covered in cli
@@ -434,12 +433,7 @@ class HTML2Tex(HTMLParser.HTMLParser):
                 self.o(self.close_quote)
             self.quote = not self.quote
 
-        def link_url(self, link, title=""):
-            url = urlparse.urljoin(self.baseurl, link)
-            title = ' "{}"'.format(title) if title.strip() else ""
-            self.o("]({url}{title})".format(url=escape_md(url), title=title))
-
-        if tag == "a" and not self.ignore_links: #todo
+        if tag == "a" and not self.ignore_links:
             if start:
                 if (
                         "href" in attrs
@@ -449,8 +443,7 @@ class HTML2Tex(HTMLParser.HTMLParser):
                     self.astack.append(attrs)
                     self.maybe_automatic_link = attrs["href"]
                     self.empty_link = True
-                    if self.protect_links:
-                        attrs["href"] = "<" + attrs["href"] + ">"
+                    self.o("\\urlorhyperlink{{{}}}{".format(attrs["href"]))
                 else:
                     self.astack.append(None)
             else:
@@ -460,27 +453,10 @@ class HTML2Tex(HTMLParser.HTMLParser):
                         self.maybe_automatic_link = None
                     elif a:
                         if self.empty_link:
-                            self.o("[")
                             self.empty_link = False
                             self.maybe_automatic_link = None
-                        if self.inline_links:
-                            try:
-                                title = a["title"] if a["title"] else ""
-                                title = escape_md(title)
-                            except KeyError:
-                                link_url(self, a["href"], "")
-                            else:
-                                link_url(self, a["href"], title)
-                        else:
-                            i = self.previousIndex(a)
-                            if i is not None:
-                                a = self.a[i]
-                            else:
-                                self.acount += 1
-                                a["count"] = self.acount
-                                a["outcount"] = self.outcount
-                                self.a.append(a)
-                            self.o("][" + str(a["count"]) + "]")
+                        self.o("}")
+
 
         if tag == "img" and start and not self.ignore_images:
             if "src" in attrs:
@@ -516,9 +492,9 @@ class HTML2Tex(HTMLParser.HTMLParser):
                     self.o("\\begin{itemize}")
             else:
                 if tag == "ol":
-                    self.o("\\end{enumerate}")
+                    self.o("\\end{enumerate}\n")
                 else:
-                    self.o("\\end{itemize}")
+                    self.o("\\end{itemize}\n")
 
         if tag == "li":
             if start:
@@ -827,9 +803,9 @@ class HTML2Tex(HTMLParser.HTMLParser):
         return result
 
 
-def html2text(html, baseurl="", bodywidth=None):
+def html2tex(html, baseurl="", bodywidth=None):
     if bodywidth is None:
         bodywidth = config.BODY_WIDTH
-    h = HTML2Text(baseurl=baseurl, bodywidth=bodywidth)
+    h = HTML2Tex(baseurl=baseurl, bodywidth=bodywidth)
 
     return h.handle(html)

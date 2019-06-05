@@ -1,7 +1,7 @@
 
 def make_picture_link(filepath, caption="", label=""):
 
-    result = """\\begin{{figure}}[h!]
+    result = """\\begin{{figure}}[H]
     \\includegraphics[width=\\linewidth]{{{}}}
     """.format(filepath)
 
