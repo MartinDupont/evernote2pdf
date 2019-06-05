@@ -4,7 +4,7 @@ asd asd asd asd asd asd asd asd asd asd asd asd asd asd asd asd asd asd asd
 asd asd asd asd asd asd asd asd asd asd asd asd asd asd asd asd asd asd asd
 asd asd asd asd asd asd asd asd asd asd asd asd asd asd asd asd asd asd asd
 asd asd asd asd asd
-![](http://www.foooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo.com)
+\begin{figure}[H]\includegraphics[width=\linewidth]{http://www.foooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo.com}\end{figure}
 asd asd asd asd asd asd asd asd asd asd asd asd asd asd asd asd asd asd asd
 asd asd asd asd asd asd asd asd asd asd asd asd asd asd asd asd asd asd asd
 asd asd asd asd asd asd asd asd asd asd asd asd asd asd asd asd asd asd asd

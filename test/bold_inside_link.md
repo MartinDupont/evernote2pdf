@@ -1,2 +1,3 @@
-[**Text**](link.htm) [**sample**](/nothing/)
+\urlorhyperlink{link.html}{\textbf{Text}}
+\urlorhyperlink{/nothing/}{\textbf{sample}}
 

@@ -2,22 +2,17 @@
 
 first issue
 
-  * bit
-  * _**bold italic**_
-    * orange
-    * apple
-  * final
+\begin{itemize} \item  bit \item  \textit{\textbf{bold italic}} \item  orange
+\item  apple \item  final \end{itemize}
 
 text to separate lists
 
-  1. now with numbers
-  2. the prisoner
-    1. not an _italic number_
-    2. a **bold human** being
-  3. end
+\begin{enumerate} \item  now with numbers \item  the prisoner \item  not an
+\textit{italic number} \item  a \textbf{bold human} being \item  end
+\end{enumerate}
 
-**bold**  
-_italic_  
+\textbf{bold}  
+\textit{italic}  
 
     
     
@@ -27,8 +22,8 @@ _italic_
       return 'b'
           
 
-Some `fixed width text` here  
-_`italic fixed width text`_
+Some fixed width text here  
+\textit{italic fixed width text}
 
 2012\. Now that was a good year. So was 2011. That's all.
 

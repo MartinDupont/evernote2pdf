@@ -313,7 +313,6 @@ class HTML2Tex(HTMLParser.HTMLParser):
                 and tag not in ["p", "div", "style", "dl", "dt"]
                 and (tag != "img" or self.ignore_images)
         ):
-            self.o("[") #
             self.maybe_automatic_link = None
             self.empty_link = False
 
@@ -401,7 +400,7 @@ class HTML2Tex(HTMLParser.HTMLParser):
                 self.stressed = True
 
         if tag in ["del", "strike", "s"]:
-            if start and no_preceding_space(self):
+            if start:
                 strike = self.strikethrough_opening
             else:
                 strike = "}"
@@ -443,7 +442,7 @@ class HTML2Tex(HTMLParser.HTMLParser):
                     self.astack.append(attrs)
                     self.maybe_automatic_link = attrs["href"]
                     self.empty_link = True
-                    self.o("\\urlorhyperlink{{{}}}{".format(attrs["href"]))
+                    self.o("\\urlorhyperlink{{{}}}{{".format(urlparse.urljoin(self.baseurl, attrs["href"])))
                 else:
                     self.astack.append(None)
             else:
@@ -714,7 +713,6 @@ class HTML2Tex(HTMLParser.HTMLParser):
                 self.empty_link = False
                 return
             else:
-                self.o("[")
                 self.maybe_automatic_link = None
                 self.empty_link = False
 
