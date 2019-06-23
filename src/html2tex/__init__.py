@@ -105,7 +105,6 @@ class HTML2Tex(HTMLParser.HTMLParser):
         self.space = False
         self.a = []
         self.astack = []
-        self.maybe_automatic_link = None
         self.empty_link = False
         self.absolute_url_matcher = re.compile(r"^[a-zA-Z+]+://")
         self.acount = 0
@@ -311,11 +310,9 @@ class HTML2Tex(HTMLParser.HTMLParser):
         # todo
         if (
                 start
-                and self.maybe_automatic_link is not None
                 and tag not in ["p", "div", "style", "dl", "dt"]
                 and (tag != "img" or self.ignore_images)
         ):
-            self.maybe_automatic_link = None
             self.empty_link = False
 
 
@@ -437,7 +434,6 @@ class HTML2Tex(HTMLParser.HTMLParser):
                         and not (self.skip_internal_links and attrs["href"].startswith("#"))
                 ):
                     self.astack.append(attrs)
-                    self.maybe_automatic_link = attrs["href"]
                     self.empty_link = True
                     self.o("\\urlorhyperlink{{{}}}{{".format(urlparse.urljoin(self.baseurl, attrs["href"])))
                 else:
@@ -445,9 +441,7 @@ class HTML2Tex(HTMLParser.HTMLParser):
             else:
                 if self.astack:
                     a = self.astack.pop()
-                    if self.maybe_automatic_link and not self.empty_link:
-                        self.maybe_automatic_link = None
-                    elif a:
+                    if a:
                         if self.empty_link:
                             self.empty_link = False
                             self.maybe_automatic_link = None
@@ -698,20 +692,6 @@ class HTML2Tex(HTMLParser.HTMLParser):
 
         if self.style:
             self.style_def.update(dumb_css_parser(data))
-
-        if self.maybe_automatic_link is not None:
-            href = self.maybe_automatic_link
-            if (
-                    href == data
-                    and self.absolute_url_matcher.match(href)
-                    and self.use_automatic_links
-            ):
-                self.o("<" + data + ">")
-                self.empty_link = False
-                return
-            else:
-                self.maybe_automatic_link = None
-                self.empty_link = False
 
         if not self.code and not self.pre and not entity_char:
             data = escape_md_section(data, snob=self.escape_snob)
