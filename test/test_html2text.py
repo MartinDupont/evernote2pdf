@@ -6,7 +6,10 @@ import subprocess
 import sys
 
 import src.html2tex as html2tex
+import src.html2tex.utils as utils
 import pytest
+
+from src.html2tex import config
 
 skip = object()
 

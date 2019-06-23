@@ -224,6 +224,8 @@ def escape_md(text):
     """
     return config.RE_MD_CHARS_MATCHER.sub(r"\\\1", text)
 
+def make_table_count(count):
+    return "||" + " ".join(["c" for i in range(count)]) + "||"
 
 def escape_md_section(text, snob=False):
     """

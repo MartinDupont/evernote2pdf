@@ -62,8 +62,9 @@ RE_UNORDERED_LIST_MATCHER = re.compile(r"[-\*\+]\s")
 RE_MD_CHARS_MATCHER = re.compile(r"([\\\[\]\(\)])")
 RE_MD_CHARS_MATCHER_ALL = re.compile(r"([`\*_{}\[\]\(\)#!])")
 
+LINK_OPENING = "\\urlorhyperlink"
 # to find links in the text
-RE_LINK = re.compile(r"(\[.*?\] ?\(.*?\))|(\[.*?\]:.*?)")
+RE_LINK = re.compile(r"(\\urlorhyperlink{.*?} ?{.*?})")
 
 RE_MD_DOT_MATCHER = re.compile(
     r"""

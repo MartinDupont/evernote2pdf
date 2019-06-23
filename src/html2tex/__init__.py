@@ -8,7 +8,7 @@ from textwrap import wrap
 
 from src.html2tex import config
 from src.html2tex.compat import HTMLParser, urlparse
-from src.html2tex.format_latex import make_picture_link
+from src.html2tex.format_latex import make_picture_link, make_bare_image
 from src.html2tex.utils import (
     dumb_css_parser,
     element_style,
@@ -24,6 +24,7 @@ from src.html2tex.utils import (
     pad_tables_in_text,
     skipwrap,
     unifiable_n,
+    make_table_count
 )
 
 try:
@@ -70,7 +71,6 @@ class HTML2Tex(HTMLParser.HTMLParser):
         self.images_to_alt = config.IMAGES_TO_ALT  # covered in cli
         self.images_with_size = config.IMAGES_WITH_SIZE  # covered in cli
         self.ignore_emphasis = config.IGNORE_EMPHASIS  # covered in cli
-        self.bypass_tables = config.BYPASS_TABLES  # covered in cli
         self.ignore_tables = config.IGNORE_TABLES  # covered in cli
         self.ul_item_mark = "\\item"  # covered in cli
         self.emphasis_opening = "\\textit{"  # covered in cli
@@ -78,6 +78,9 @@ class HTML2Tex(HTMLParser.HTMLParser):
         self.strikethrough_opening = "\\sout{"
         self.start_quote= "\\begin{quote}"
         self.end_quote= "\\end{quote}"
+        self.table_head = "\\begin{{tabular}}{{{}}}\n"
+        self.table_end = "\\end{tabular}\n"
+        self.link_opening = config.LINK_OPENING
         self.single_line_break = config.SINGLE_LINE_BREAK  # covered in cli
         self.use_automatic_links = config.USE_AUTOMATIC_LINKS  # covered in cli
         self.hide_strikethrough = False  # covered in cli
@@ -105,7 +108,6 @@ class HTML2Tex(HTMLParser.HTMLParser):
         self.space = False
         self.a = []
         self.astack = []
-        self.empty_link = False
         self.absolute_url_matcher = re.compile(r"^[a-zA-Z+]+://")
         self.acount = 0
         self.list = []
@@ -131,6 +133,7 @@ class HTML2Tex(HTMLParser.HTMLParser):
         self.preceding_stressed = False
         self.preceding_data = None
         self.current_tag = None
+        self.table_string = ""
 
         config.UNIFIABLE["nbsp"] = "&nbsp_place_holder;"
 
@@ -325,16 +328,13 @@ class HTML2Tex(HTMLParser.HTMLParser):
                 self.inheader = False
                 return  # prevent redundant emphasis marks on headers
 
-        if tag in ["p", "div"]: # todo
+        if tag in ["p", "div"]: # todo: remove entirely?
             if self.astack and tag == "div":
                 pass
             else:
                 self.p()
 
         if tag == "br" and start:
-            # if self.blockquote > 0:
-            #     self.o("  \n> ")
-            # else:
             self.o("\\par\n")
 
 
@@ -435,16 +435,13 @@ class HTML2Tex(HTMLParser.HTMLParser):
                 ):
                     self.astack.append(attrs)
                     self.empty_link = True
-                    self.o("\\urlorhyperlink{{{}}}{{".format(urlparse.urljoin(self.baseurl, attrs["href"])))
+                    self.o(self.link_opening + "{{{}}}{{".format(urlparse.urljoin(self.baseurl, attrs["href"])))
                 else:
                     self.astack.append(None)
             else:
                 if self.astack:
                     a = self.astack.pop()
                     if a:
-                        if self.empty_link:
-                            self.empty_link = False
-                            self.maybe_automatic_link = None
                         self.o("}")
 
 
@@ -454,7 +451,10 @@ class HTML2Tex(HTMLParser.HTMLParser):
                     attrs["href"] = attrs["src"]
                 alt = attrs.get("alt") or self.default_image_alt
 
-                self.o(make_picture_link(attrs["src"], alt))
+                if self.td_count > 0: # we are in a table
+                    self.o(make_bare_image(attrs["src"]))
+                else:
+                    self.o(make_picture_link(attrs["src"], alt))
 
                 # If we have images_with_size, write raw html including width,
                 # height, and alt attributes
@@ -490,7 +490,7 @@ class HTML2Tex(HTMLParser.HTMLParser):
             if start:
                 self.o("\n" + self.ul_item_mark + " ")
 
-        if tag in ["table", "tr", "td", "th"]: #todo
+        if tag in ["table", "tr", "td", "th"]:
             if self.ignore_tables:
                 if tag == "tr":
                     if start:
@@ -500,45 +500,30 @@ class HTML2Tex(HTMLParser.HTMLParser):
                 else:
                     pass
 
-            elif self.bypass_tables:
-                if start:
-                    self.soft_br()
-                if tag in ["td", "th"]:
-                    if start:
-                        self.o("<{}>\n\n".format(tag))
-                    else:
-                        self.o("\n</{}>".format(tag))
-                else:
-                    if start:
-                        self.o("<{}>".format(tag))
-                    else:
-                        self.o("</{}>".format(tag))
-
             else:
                 if tag == "table":
                     if start:
                         self.table_start = True
-                        if self.pad_tables:
-                            self.o("<" + config.TABLE_MARKER_FOR_PAD + ">")
-                            self.o("  \n")
+                        self.o(self.table_head)
+                        self.o("\\hline\n")
                     else:
-                        if self.pad_tables:
-                            self.o("</" + config.TABLE_MARKER_FOR_PAD + ">")
-                            self.o("  \n")
+                        self.o("\\hline\n")
+                        self.o(self.table_end)
                 if tag in ["td", "th"] and start:
                     if self.split_next_td:
-                        self.o("| ")
+                        self.o("& ")
                     self.split_next_td = True
 
                 if tag == "tr" and start:
                     self.td_count = 0
                 if tag == "tr" and not start:
                     self.split_next_td = False
-                    self.soft_br()
+                    self.o("\\\\\n")
                 if tag == "tr" and not start and self.table_start:
                     # Underline table header
-                    self.o("|".join(["---"] * self.td_count))
-                    self.soft_br()
+                    self.o("\\hline \n")
+                    i = self.outtextlist.index(self.table_head)
+                    self.outtextlist[i] = self.outtextlist[i].format(make_table_count(self.td_count))
                     self.table_start = False
                 if tag in ["td", "th"] and start:
                     self.td_count += 1
@@ -596,10 +581,7 @@ class HTML2Tex(HTMLParser.HTMLParser):
                     self.out("\n[code]")
                     self.p_p = 0
 
-            bq = ">" * self.blockquote
-            if not (force and data and data[0] == ">") and self.blockquote:
-                bq += " "
-
+            bq = ""
             if self.pre:
                 if not self.list:
                     bq += "    "
@@ -730,7 +712,7 @@ class HTML2Tex(HTMLParser.HTMLParser):
         """
         Wrap all paragraphs in the provided text.
 
-        :typentityrefe text: str
+        :type text: str
 
         :rtype: str
         """
@@ -748,8 +730,6 @@ class HTML2Tex(HTMLParser.HTMLParser):
             if len(para) > 0:
                 if not skipwrap(para, self.wrap_links, self.wrap_list_items):
                     indent = ""
-                    if para.startswith("  " + self.ul_item_mark):
-                        indent = "    "  # For list items.
                     wrapped = wrap(
                         para,
                         self.body_width,
