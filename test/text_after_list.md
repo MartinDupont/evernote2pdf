@@ -1,4 +1,6 @@
-\begin{itemize}\item item\end{itemize}
+\begin{itemize}
+\item item
+\end{itemize}
 
 text
 

@@ -1,28 +1,28 @@
-_emphasis_
+\textit{emphasis}
 
-_emphasis:_ some text
+\textit{emphasis:} some text
 
-_repeat:_ again
+\textit{repeat:} again
 
-**bold**
+\textbf{bold}
 
-**bold:** some text
+\textbf{bold:} some text
 
-**repeat:** again
+\textbf{repeat:} again
 
-~~strike~~
+\sout{strike}
 
-~~strike:~~ some text
+\sout{strike:} some text
 
-~~strike:~~ again
+\sout{strike:} again
 
-separate _emphasis_ some more text
+separate \textit{emphasis} some more text
 
-_emphasis_.
+\textit{emphasis}.
 
-_emphasis_?
+\textit{emphasis}?
 
-_emphasis_!
+\textit{emphasis}!
 
-_em1_ _em2_
+\textit{em1} \textit{em2}
 

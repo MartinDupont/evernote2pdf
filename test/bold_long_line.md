@@ -1,3 +1,3 @@
-**text** and a very long long long long long long long long long long long
-long long long long long long long long long line
+\textbf{text} and a very long long long long long long long long long long
+long long long long long long long long long long line
 

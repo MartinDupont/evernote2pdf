@@ -1,5 +1,10 @@
 a
 
-> b  
-> c
+\begin{quote}
+
+b\par
+
+c
+
+\end{quote}
 

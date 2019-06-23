@@ -1,3 +1,4 @@
-[ first example](http://example.com "MyTitle")  
-[ second example](http://example.com)
+\urlorhyperlink{http://example.com}{ first example} \par
+\urlorhyperlink{http://example.com}{ second example}
+
 

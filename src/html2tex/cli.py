@@ -263,9 +263,6 @@ def main():
     # handle options
     if args.ul_style_dash:
         h.ul_item_mark = "-"
-    if args.em_style_asterisk:
-        h.emphasis_mark = "*"
-        h.strong_mark = "__"
 
     h.body_width = args.body_width
     h.google_list_indent = args.list_indent

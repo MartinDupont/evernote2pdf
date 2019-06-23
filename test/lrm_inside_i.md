@@ -1,2 +1,2 @@
-_Foo bar_
+\textit{Foo bar}
 

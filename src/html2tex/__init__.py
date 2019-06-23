@@ -76,6 +76,8 @@ class HTML2Tex(HTMLParser.HTMLParser):
         self.emphasis_opening = "\\textit{"  # covered in cli
         self.strong_opening = "\\textbf{"
         self.strikethrough_opening = "\\sout{"
+        self.start_quote= "\\begin{quote}"
+        self.end_quote= "\\end{quote}"
         self.single_line_break = config.SINGLE_LINE_BREAK  # covered in cli
         self.use_automatic_links = config.USE_AUTOMATIC_LINKS  # covered in cli
         self.hide_strikethrough = False  # covered in cli
@@ -336,8 +338,7 @@ class HTML2Tex(HTMLParser.HTMLParser):
             # if self.blockquote > 0:
             #     self.o("  \n> ")
             # else:
-            #self.o("  \\newline")
-            self.o("  \n")
+            self.o("\\par\n")
 
 
         if tag == "hr" and start:
@@ -360,15 +361,11 @@ class HTML2Tex(HTMLParser.HTMLParser):
         if tag in ["body"]: # todo
             self.quiet = 0  # sites like 9rules.com never close <head>
 
-        if tag == "blockquote": # todo
+        if tag == "blockquote":
             if start:
-                self.p()
-                self.o("> ", 0, 1)
-                self.start = True
-                self.blockquote += 1
+                self.o("\n" + self.start_quote + "\n")
             else:
-                self.blockquote -= 1
-                self.p()
+                self.o("\n" + self.end_quote + "\n")
 
         def no_preceding_space(self):
             return self.preceding_data and re.match(r"[^\s]", self.preceding_data[-1])
@@ -486,18 +483,18 @@ class HTML2Tex(HTMLParser.HTMLParser):
         if tag in ["ol", "ul"]:
             if start:
                 if tag == "ol":
-                    self.o("\\begin{enumerate}")
+                    self.o("\\begin{enumerate}\n")
                 else:
-                    self.o("\\begin{itemize}")
+                    self.o("\\begin{itemize}\n")
             else:
                 if tag == "ol":
-                    self.o("\\end{enumerate}\n")
+                    self.o("\n\\end{enumerate}\n")
                 else:
-                    self.o("\\end{itemize}\n")
+                    self.o("\n\\end{itemize}\n")
 
         if tag == "li":
             if start:
-                self.o(self.ul_item_mark + " ")
+                self.o("\n" + self.ul_item_mark + " ")
 
         if tag in ["table", "tr", "td", "th"]: #todo
             if self.ignore_tables:
