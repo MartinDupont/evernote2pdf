@@ -10,7 +10,6 @@ from src.html2tex import config
 from src.html2tex.compat import HTMLParser, urlparse
 from src.html2tex.format_latex import make_picture_link, make_bare_image
 from src.html2tex.utils import (
-    dumb_css_parser,
     element_style,
     escape_md,
     escape_md_section,
@@ -119,8 +118,6 @@ class HTML2Tex(HTMLParser.HTMLParser):
         self.br_toggle = ""
         self.lastWasNL = False
         self.lastWasList = False
-        self.style = 0
-        self.style_def = {}
         self.tag_stack = []
         self.emphasis = 0
         self.drop_white_space = 0
@@ -343,17 +340,12 @@ class HTML2Tex(HTMLParser.HTMLParser):
             self.o("\\hrule")
             self.p()
 
-        if tag in ["head", "style", "script"]: # todo
+        if tag in ["head", "script"]: # todo
             if start:
                 self.quiet += 1
             else:
                 self.quiet -= 1
 
-        if tag == "style": # todo
-            if start:
-                self.style += 1
-            else:
-                self.style -= 1
 
         if tag in ["body"]: # todo
             self.quiet = 0  # sites like 9rules.com never close <head>
@@ -672,9 +664,6 @@ class HTML2Tex(HTMLParser.HTMLParser):
                 data = " " + data
             self.preceding_stressed = False
 
-        if self.style:
-            self.style_def.update(dumb_css_parser(data))
-
         if not self.code and not self.pre and not entity_char:
             data = escape_md_section(data, snob=self.escape_snob)
         self.preceding_data = data
@@ -724,11 +713,11 @@ class HTML2Tex(HTMLParser.HTMLParser):
         # I cannot think of a better solution for now.
         # To avoid the non-wrap behaviour for entire paras
         # because of the presence of a link in it
-        if not self.wrap_links:
+        if not False: # Todo: fix this later, used to be self.wrap_links
             self.inline_links = False
         for para in text.split("\n"):
             if len(para) > 0:
-                if not skipwrap(para, self.wrap_links, self.wrap_list_items):
+                if not skipwrap(para, False, self.wrap_list_items):
                     indent = ""
                     wrapped = wrap(
                         para,

@@ -23,45 +23,6 @@ def hn(tag):
         except ValueError:
             return 0
 
-
-def dumb_property_dict(style):
-    """
-    :returns: A hash of css attributes
-    """
-    out = {
-        x.strip().lower(): y.strip().lower()
-        for x, y in [z.split(":", 1) for z in style.split(";") if ":" in z]
-    }
-
-    return out
-
-
-def dumb_css_parser(data):
-    """
-    :type data: str
-
-    :returns: A hash of css selectors, each of which contains a hash of
-    css attributes.
-    :rtype: dict
-    """
-    # remove @import sentences
-    data += ";"
-    importIndex = data.find("@import")
-    while importIndex != -1:
-        data = data[0:importIndex] + data[data.find(";", importIndex) + 1 :]
-        importIndex = data.find("@import")
-
-    # parse the css. reverted from dictionary comprehension in order to
-    # support older pythons
-    elements = [x.split("{") for x in data.split("}") if "{" in x.strip()]
-    try:
-        elements = {a.strip(): dumb_property_dict(b) for a, b in elements}
-    except ValueError:
-        elements = {}  # not that important
-
-    return elements
-
-
 def element_style(attrs, style_def, parent_style):
     """
     :type attrs: dict
