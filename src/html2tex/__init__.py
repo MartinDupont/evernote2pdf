@@ -125,7 +125,6 @@ class HTML2Tex(HTMLParser.HTMLParser):
         self.inheader = False
         self.abbr_title = None  # current abbreviation definition
         self.abbr_data = None  # last inner HTML (for abbr being defined)
-        self.abbr_list = {}  # stack of abbreviations to write later
         self.baseurl = baseurl
         self.stressed = False
         self.preceding_stressed = False
@@ -355,7 +354,6 @@ class HTML2Tex(HTMLParser.HTMLParser):
             else:
                 self.quiet -= 1
 
-
         if tag in ["body"]:
             self.quiet = 0  # sites like 9rules.com never close <head>
 
@@ -411,7 +409,7 @@ class HTML2Tex(HTMLParser.HTMLParser):
                 self.out("}")
             self.code = not self.code
 
-        if tag == "abbr": # todo
+        if tag == "abbr":
             if start:
                 self.abbr_title = None
                 self.abbr_data = ""
@@ -419,7 +417,7 @@ class HTML2Tex(HTMLParser.HTMLParser):
                     self.abbr_title = attrs["title"]
             else:
                 if self.abbr_title is not None:
-                    self.abbr_list[self.abbr_data] = self.abbr_title
+                    self.out("\\footnote{{{}}}".format(self.abbr_title))
                     self.abbr_title = None
                 self.abbr_data = ""
 
@@ -647,10 +645,6 @@ class HTML2Tex(HTMLParser.HTMLParser):
                     self.out("\n")
 
                 self.a = newa
-
-            if self.abbr_list and force == "end":
-                for abbr, definition in self.abbr_list.items():
-                    self.out("  *[" + abbr + "]: " + definition + "\n")
 
             self.p_p = 0
             self.out(data)

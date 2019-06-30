@@ -1,4 +1,1 @@
-TLA xyz
-
-  *[TLA]: Three Letter Acronym
-
+TLA\footnote{Three Letter Acronym} xyz
