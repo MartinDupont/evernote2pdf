@@ -1,2 +1,3 @@
-[![Image](images/google.png)](http://google.com)
+\begin{figure}[H]\includegraphics[width=\linewidth]{images/google.png}\caption{Image}\end{figure}
+
 

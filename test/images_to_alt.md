@@ -1,4 +1,5 @@
-[ ALT TEXT ](http://example.com)  
-[ALT TEXT](http://example.com)  
-<http://example.com>
-
+\begin{figure}[H]\includegraphics[width=\linewidth]{http://example.com/img.png}\caption{ALT 
+TEXT}\end{figure} \par
+\begin{figure}[H]\includegraphics[width=\linewidth]{http://example.com/img.png}\caption{ALT 
+TEXT}\end{figure} \par
+\begin{figure}[H]\includegraphics[width=\linewidth]{http://example.com/img.png}\caption{http://example.com}\end{figure}
