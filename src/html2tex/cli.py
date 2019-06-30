@@ -132,14 +132,6 @@ def main():
         help="number of characters per output line, 0 for no wrap",
     )
     p.add_argument(
-        "-i",
-        "--google-list-indent",
-        dest="list_indent",
-        type=int,
-        default=config.GOOGLE_LIST_INDENT,
-        help="number of pixels Google indents nested lists",
-    )
-    p.add_argument(
         "-s",
         "--hide-strikethrough",
         action="store_true",
@@ -255,7 +247,6 @@ def main():
         h.ul_item_mark = "-"
 
     h.body_width = args.body_width
-    h.google_list_indent = args.list_indent
     h.ignore_emphasis = args.ignore_emphasis
     h.ignore_links = args.ignore_links
     h.protect_links = args.protect_links

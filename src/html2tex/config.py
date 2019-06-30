@@ -150,7 +150,6 @@ BYPASS_TABLES = False
 # Ignore table-related tags (table, th, td, tr) while keeping rows
 IGNORE_TABLES = False
 
-
 # Use a single line break after a block element rather than two line breaks.
 # NOTE: Requires body width setting to be 0.
 SINGLE_LINE_BREAK = False

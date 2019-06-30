@@ -10,17 +10,10 @@ from src.html2tex import config
 from src.html2tex.compat import HTMLParser, urlparse
 from src.html2tex.format_latex import make_picture_link, make_bare_image
 from src.html2tex.utils import (
-    element_style,
     escape_md,
     escape_md_section,
-    google_fixed_width_font,
-    google_has_height,
-    google_list_style,
-    google_text_emphasis,
     hn,
-    list_numbering_start,
     name2cp,
-    pad_tables_in_text,
     skipwrap,
     unifiable_n,
     make_table_count
@@ -62,7 +55,6 @@ class HTML2Tex(HTMLParser.HTMLParser):
         self.body_width = bodywidth  # covered in cli
         self.skip_internal_links = config.SKIP_INTERNAL_LINKS  # covered in cli
         self.inline_links = config.INLINE_LINKS  # covered in cli
-        self.google_list_indent = config.GOOGLE_LIST_INDENT  # covered in cli
         self.ignore_links = config.IGNORE_ANCHORS  # covered in cli
         self.ignore_images = config.IGNORE_IMAGES  # covered in cli
         self.images_as_html = config.IMAGES_AS_HTML  # covered in cli
@@ -150,10 +142,7 @@ class HTML2Tex(HTMLParser.HTMLParser):
         self.feed(data)
         self.feed("")
         markdown = self.optwrap(self.close())
-        if self.pad_tables:
-            return pad_tables_in_text(markdown)
-        else:
-            return markdown
+        return markdown
 
     def outtextf(self, s):
         self.outtextlist.append(s)
@@ -229,77 +218,6 @@ class HTML2Tex(HTMLParser.HTMLParser):
 
             if match:
                 return i
-
-    def handle_emphasis(self, start, tag_style, parent_style):
-        """
-        Handles various text emphases
-        """
-        tag_emphasis = google_text_emphasis(tag_style)
-        parent_emphasis = google_text_emphasis(parent_style)
-
-        # handle Google's text emphasis
-        strikethrough = "line-through" in tag_emphasis and self.hide_strikethrough
-
-        # google and others may mark a font's weight as `bold` or `700`
-        bold = False
-        for bold_marker in config.BOLD_TEXT_STYLE_VALUES:
-            bold = bold_marker in tag_emphasis and bold_marker not in parent_emphasis
-            if bold:
-                break
-
-        italic = "italic" in tag_emphasis and "italic" not in parent_emphasis
-        fixed = (
-                google_fixed_width_font(tag_style)
-                and not google_fixed_width_font(parent_style)
-                and not self.pre
-        )
-
-        if start:
-            # crossed-out text must be handled before other attributes
-            # in order not to output qualifiers unnecessarily
-            if bold or italic or fixed:
-                self.emphasis += 1
-            if strikethrough:
-                self.quiet += 1
-            if italic:
-                self.o(self.emphasis_opening)
-                self.drop_white_space += 1
-            if bold:
-                self.o(self.strong_opening)
-                self.drop_white_space += 1
-            if fixed:
-                self.o("`")
-                self.drop_white_space += 1
-                self.code = True
-        else:
-            if bold or italic or fixed:
-                # there must not be whitespace before closing emphasis mark
-                self.emphasis -= 1
-                self.space = False
-            if fixed:
-                if self.drop_white_space:
-                    # empty emphasis, drop it
-                    self.drop_white_space -= 1
-                else:
-                    self.o("`")
-                self.code = False
-            if bold:
-                if self.drop_white_space:
-                    # empty emphasis, drop it
-                    self.drop_white_space -= 1
-                else:
-                    self.o("}")
-            if italic:
-                if self.drop_white_space:
-                    # empty emphasis, drop it
-                    self.drop_white_space -= 1
-                else:
-                    self.o("}")
-            # space is only allowed after *all* emphasis marks
-            if (bold or italic) and not self.emphasis:
-                self.o(" ")
-            if strikethrough:
-                self.quiet -= 1
 
     def handle_tag(self, tag, attrs, start):
         self.current_tag = tag
