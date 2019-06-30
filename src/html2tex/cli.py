@@ -148,16 +148,6 @@ def main():
         help="hide strike-through text. only relevant when -g is " "specified as well",
     )
     p.add_argument(
-        "--escape-all",
-        action="store_true",
-        dest="escape_snob",
-        default=False,
-        help=(
-            "Escape all special characters.  Output is less readable, but avoids "
-            "corner case formatting issues."
-        ),
-    )
-    p.add_argument(
         "--bypass-tables",
         action="store_true",
         dest="bypass_tables",
@@ -274,7 +264,6 @@ def main():
     h.images_to_alt = args.images_to_alt
     h.images_with_size = args.images_with_size
     h.hide_strikethrough = args.hide_strikethrough
-    h.escape_snob = args.escape_snob
     h.bypass_tables = args.bypass_tables
     h.ignore_tables = args.ignore_tables
     h.single_line_break = args.single_line_break

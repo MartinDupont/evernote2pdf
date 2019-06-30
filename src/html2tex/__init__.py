@@ -58,7 +58,6 @@ class HTML2Tex(HTMLParser.HTMLParser):
         self.td_count = 0
         self.table_start = False
         self.unicode_snob = config.UNICODE_SNOB  # covered in cli
-        self.escape_snob = config.ESCAPE_SNOB  # covered in cli
         self.links_each_paragraph = config.LINKS_EACH_PARAGRAPH
         self.body_width = bodywidth  # covered in cli
         self.skip_internal_links = config.SKIP_INTERNAL_LINKS  # covered in cli
@@ -79,6 +78,9 @@ class HTML2Tex(HTMLParser.HTMLParser):
         self.end_quote= "\\end{quote}"
         self.table_head = "\\begin{{tabular}}{{{}}}\n"
         self.table_end = "\\end{tabular}\n"
+        self.pre_start = "\n\\begin{verbatim}"
+        self.pre_end = "\n\\end{verbatim}"
+        self.code_start = "\\texttt{"
         self.link_opening = config.LINK_OPENING
         self.single_line_break = config.SINGLE_LINE_BREAK  # covered in cli
         self.use_automatic_links = config.USE_AUTOMATIC_LINKS  # covered in cli
@@ -340,7 +342,7 @@ class HTML2Tex(HTMLParser.HTMLParser):
             self.o("\\hrule")
             self.p()
 
-        if tag in ["head", "script"]: # todo
+        if tag in ["head", "script"]:
             if start:
                 self.quiet += 1
             else:
@@ -395,8 +397,11 @@ class HTML2Tex(HTMLParser.HTMLParser):
             if start:
                 self.stressed = True
 
-        if tag in ["kbd", "code", "tt"] and not self.pre: # todo
-            self.o("")
+        if tag in ["kbd", "code", "tt"] and not self.pre:
+            if start:
+                self.o(self.code_start)
+            else:
+                self.out("}")
             self.code = not self.code
 
         if tag == "abbr": # todo
@@ -520,14 +525,14 @@ class HTML2Tex(HTMLParser.HTMLParser):
                 if tag in ["td", "th"] and start:
                     self.td_count += 1
 
-        if tag == "pre": #todo
+        if tag == "pre":
             if start:
                 self.startpre = True
                 self.pre = True
+                self.out(self.pre_start)
             else:
                 self.pre = False
-                if self.mark_code:
-                    self.out("\n[/code]")
+                self.out(self.pre_end)
             self.p()
 
     # TODO: Add docstring for these one letter functions
@@ -569,9 +574,6 @@ class HTML2Tex(HTMLParser.HTMLParser):
                 if not data.startswith("\n") and not data.startswith("\r\n"):
                     # <pre>stuff...
                     data = "\n" + data
-                if self.mark_code:
-                    self.out("\n[code]")
-                    self.p_p = 0
 
             bq = ""
             if self.pre:
@@ -665,7 +667,7 @@ class HTML2Tex(HTMLParser.HTMLParser):
             self.preceding_stressed = False
 
         if not self.code and not self.pre and not entity_char:
-            data = escape_md_section(data, snob=self.escape_snob)
+            data = escape_md_section(data, snob=False)
         self.preceding_data = data
         self.o(data, 1)
 

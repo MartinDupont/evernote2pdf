@@ -1,13 +1,13 @@
 Normal text with 'pre' code block.
 
-[code]
+\begin{verbatim}
 
     import os
     
     def function():
         a = 1
     
-[/code]
+\end{verbatim}
 
 Normal text continues.
 

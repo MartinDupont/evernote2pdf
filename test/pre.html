@@ -3,9 +3,10 @@
     <title>initial crowded pre handling test #1</title>
   </head>
   <body>
-<pre>a
-b
-c</pre>
+<pre>def outtextf(self, s):
+    self.outtextlist.append(s)
+    if s:
+        self.lastWasNL = s[-1] == "\n"</pre>
 
     <p>Ensure that HTML that starts with a crowded <code>&lt;pre&gt;</code>
     is converted to reasonable Markdown.</p>
