@@ -1,29 +1,33 @@
-Definition List
+\begin{definition}
+\item[ Definition List]
 
-    A list of terms and their definitions/descriptions.
-Ordered List
+A list of terms and their definitions/descriptions.
+\item[ Ordered List]
 
-    A numbered list.
-Unordered List
+A numbered list.
+\item[ Unordered List]
 
-    An unnumbered list.
+An unnumbered list.
 
+\end{definition}
 #### Example 2
 
-Vocals
+\begin{definition}
+\item[ Vocals]
 
-    Bruce Dickinson
-Guitar
+Bruce Dickinson
+\item[ Guitar]
 
-    Adrian Smith
-    Dave Murray
-    Janick Gers
-Bass
+Adrian Smith
+Dave Murray
+Janick Gers
+\item[ Bass]
 
-    Steve Harris
-Drums
+Steve Harris
+\item[ Drums]
 
-    Nicko McBrain
+Nicko McBrain
+\end{definition}
 \begin{itemize}
 \item some item
 \item Some other item

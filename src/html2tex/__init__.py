@@ -461,15 +461,19 @@ class HTML2Tex(HTMLParser.HTMLParser):
                 #    self.o("height='" + attrs["height"] + "' ")
                 return
 
+        if tag == "dl":
+            if start:
+                self.o("\\begin{definition}\n")
+            else:
+                self.o("\n\\end{definition}\n")
+        if tag == "dt":
+            if start:
+                self.out("\n\\item[")
+            else:
+                self.out("]")
+        if tag == "dd" and start:
+            self.o("\n")
 
-        if tag == "dl" and start: #todo
-            self.p()
-        if tag == "dt" and not start: #todo
-            self.pbr()
-        if tag == "dd" and start: #todo
-            self.o("    ")
-        if tag == "dd" and not start: #todo
-            self.pbr()
 
         if tag in ["ol", "ul"]:
             if start:
