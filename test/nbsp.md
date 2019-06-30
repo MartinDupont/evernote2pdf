@@ -1,4 +1,4 @@
-# NBSP handling test #1
+{\Huge NBSP handling test #1}
 
 In this test all NBSPs will be replaced with ordinary spaces (unicode_snob =
 False).

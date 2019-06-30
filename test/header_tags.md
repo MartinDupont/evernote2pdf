@@ -1,20 +1,12 @@
-# H1
+{\Huge H1}
 
-## H2
+{\Huge H2}
 
-### H3
+{\huge H3}
 
-#### H4
+{\LARGE H4}
 
-##### H5
+{\Large H5}
 
-###### H6
-
-####### H7
-
-######## H8
-
-######### H9
-
-H10 H11 H12 NO number
-
+{\large H6}
+H7 H8 H9 H10 H11 H12 NO number

@@ -1,4 +1,4 @@
-# This is a test document
+{\Huge This is a test document}
 
 \begin{tabular}{||c c c||}
 \hline

@@ -116,7 +116,6 @@ class HTML2Tex(HTMLParser.HTMLParser):
         self.pre = False
         self.startpre = False
         self.code = False
-        self.quote = False
         self.br_toggle = ""
         self.lastWasNL = False
         self.lastWasList = False
@@ -133,6 +132,14 @@ class HTML2Tex(HTMLParser.HTMLParser):
         self.preceding_data = None
         self.current_tag = None
         self.table_string = ""
+        self.header_mapping = {
+            1: "{\\Huge ",
+            2: "{\\Huge ",
+            3: "{\\huge ",
+            4: "{\\LARGE ",
+            5: "{\\Large ",
+            6: "{\\large ",
+        }
 
         config.UNIFIABLE["nbsp"] = "&nbsp_place_holder;"
 
@@ -317,14 +324,14 @@ class HTML2Tex(HTMLParser.HTMLParser):
         ):
             self.empty_link = False
 
-
-        if hn(tag): # Headers ! # todo
+        if hn(tag):
             self.p()
             if start:
                 self.inheader = True
-                self.o(hn(tag) * "#" + " ")
+                self.o(self.header_mapping[hn(tag)])
             else:
                 self.inheader = False
+                self.out("}\n")
                 return  # prevent redundant emphasis marks on headers
 
         if tag in ["p", "div"]: # todo: remove entirely?
@@ -349,7 +356,7 @@ class HTML2Tex(HTMLParser.HTMLParser):
                 self.quiet -= 1
 
 
-        if tag in ["body"]: # todo
+        if tag in ["body"]:
             self.quiet = 0  # sites like 9rules.com never close <head>
 
         if tag == "blockquote":
@@ -417,11 +424,10 @@ class HTML2Tex(HTMLParser.HTMLParser):
                 self.abbr_data = ""
 
         if tag == "q":
-            if not self.quote:
+            if start:
                 self.o(self.open_quote)
             else:
                 self.o(self.close_quote)
-            self.quote = not self.quote
 
         if tag == "a" and not self.ignore_links:
             if start:

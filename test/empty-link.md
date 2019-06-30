@@ -1,4 +1,4 @@
-# Processing empty hyperlinks
+{\Huge Processing empty hyperlinks}
 
 This test checks whether empty hyperlinks still appear in the markdown result.
 

@@ -1,4 +1,4 @@
-# Processing hyperlinks
+{\Huge Processing hyperlinks}
 
 Additional hyperlink tests!
 

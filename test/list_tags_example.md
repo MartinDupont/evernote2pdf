@@ -10,7 +10,6 @@ A numbered list.
 An unnumbered list.
 
 \end{definition}
-#### Example 2
 
 \begin{definition}
 \item[ Vocals]

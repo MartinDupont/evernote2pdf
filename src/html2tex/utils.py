@@ -18,7 +18,7 @@ def hn(tag):
     if tag[0] == "h" and len(tag) == 2:
         try:
             n = int(tag[1])
-            if n in range(1, 10):
+            if n in range(1, 7):
                 return n
         except ValueError:
             return 0
@@ -247,7 +247,7 @@ def reformat_table(lines, right_margin):
     return new_lines
 
 
-def pad_tables_in_text(text, right_margin=1):
+def pad_tables_in_text(text, right_margin=1): # todo: remove entirely?
     """
     Provide padding for tables in the text
     """

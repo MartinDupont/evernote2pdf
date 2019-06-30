@@ -1,4 +1,4 @@
-# NBSP handling test #2
+{\Huge NBSP handling test #2}
 
 In this test all NBSPs will be replaced with unicode non-breaking spaces
 (unicode_snob = True).

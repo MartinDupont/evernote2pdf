@@ -1,4 +1,4 @@
-# Markdown-sensible characters processing
+{\Huge Markdown-sensible characters processing}
 
 This test checks special characters processing inside URLs: parenthesis and
 brackets should be escaped to keep markdown image and anchor syntax safe and
