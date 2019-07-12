@@ -64,21 +64,21 @@ def get_template_head_and_foot(path):
     return header, footer
 
 
-if __name__ == "__main__":
-    tree = ET.parse('../test/newer_notebook.enex')
+def main(name, input_file, output_dir):
+    tree = ET.parse(input_file)
     root = tree.getroot()
-    mediaStore = MediaStore("../out")
-    copyfile("../latex/diary.cls", "../out/diary.cls")
+    mediaStore = MediaStore(output_dir)
+    copyfile("../latex/diary.cls", output_dir + "/diary.cls")
 
     head, foot = get_template_head_and_foot("../latex/diary.tex")
 
-    with open("../out/diary.tex", "w") as f:
+    with open(output_dir + "/diary.tex", "w") as f:
         f.write(head)
 
         dates = [child.find("created").text for child in root]
         oldest = get_month_year(min(dates))
         newest = get_month_year(max(dates))
-        f.write("\\makeTitlePage{{{}}}{{{}}}{{{}}}\n".format("Martin Dupont", oldest, newest))
+        f.write("\\makeTitlePage{{{}}}{{{}}}{{{}}}\n".format(name, oldest, newest))
 
         for child in root:
             title = make_title(child)
@@ -98,3 +98,7 @@ if __name__ == "__main__":
 
         f.write(foot)
         f.close()
+
+
+if __name__ == "__main__":
+    main("Martin Dupont", "../test/newer_notebook.enex", "../out")
