@@ -147,13 +147,6 @@ def main():
         help="Use unicode throughout document",
     )
     p.add_argument(
-        "--no-automatic-links",
-        action="store_false",
-        dest="use_automatic_links",
-        default=config.USE_AUTOMATIC_LINKS,
-        help="Do not use automatic links wherever applicable",
-    )
-    p.add_argument(
         "--no-skip-internal-links",
         action="store_false",
         dest="skip_internal_links",
@@ -227,7 +220,6 @@ def main():
     h.single_line_break = args.single_line_break
     h.inline_links = args.inline_links
     h.unicode_snob = args.unicode_snob
-    h.use_automatic_links = args.use_automatic_links
     h.skip_internal_links = args.skip_internal_links
     h.mark_code = args.mark_code
     h.wrap_links = args.wrap_links

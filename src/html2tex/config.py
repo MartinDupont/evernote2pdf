@@ -5,8 +5,6 @@ import re
 # Use Unicode characters instead of their ascii pseudo-replacements
 UNICODE_SNOB = False
 
-# Marker to use for marking tables for padding post processing
-TABLE_MARKER_FOR_PAD = "special_marker_for_table_padding"
 # Escape all special characters.  Output is less readable, but avoids
 # corner case formatting issues.
 ESCAPE_SNOB = False
@@ -36,10 +34,6 @@ MARK_CODE = False
 DECODE_ERRORS = "strict"
 DEFAULT_IMAGE_ALT = ""
 PAD_TABLES = False
-
-# Convert links with same href and text to <href> format
-# if they are absolute links
-USE_AUTOMATIC_LINKS = True
 
 # For checking space-only lines on line 771
 RE_SPACE = re.compile(r"\s\+")

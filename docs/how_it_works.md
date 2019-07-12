@@ -22,13 +22,11 @@ Used to provide various configuration settings to the converter. They are as fol
     - SKIP_INTERNAL_LINKS to skip #local-anchor things
     - INLINE_LINKS for formatting images and links
     - PROTECT_LINKS protect from line breaks
-    - GOOGLE_LIST_INDENT no of pixels to indent nested lists
     - IGNORE_ANCHORS
     - IGNORE_IMAGES
     - IMAGES_TO_ALT
     - IMAGES_WITH_SIZE
     - IGNORE_EMPHASIS
-    - BYPASS_TABLES format tables in HTML rather than Markdown
     - IGNORE_TABLES ignore table-related tags (table, th, td, tr) while keeping rows
     - SINGLE_LINE_BREAK to use a single line break rather than two
     - UNIFIABLE is a dictionary which maps unicode abbreviations to ASCII
@@ -43,7 +41,6 @@ Used to provide various configuration settings to the converter. They are as fol
     - RE_MD_DASH_MATCHER for matching lines starting with <space>(-)<space>
     - RE_SLASH_CHARS a string of slash escapeable characters
     - RE_MD_BACKSLASH_MATCHER to match \char
-    - USE_AUTOMATIC_LINKS to convert <a href='http://xyz'>http://xyz</a> to <http://xyz>
 
 utils.py
 --------
@@ -57,7 +54,6 @@ Some functions are:
     - dumb_css_parser           :returns a hash of css selectors, each
                                  containing a hash of css attrs
     - element_style             :hash of final style of element
-    - google_list_style         :find out ordered?unordered
     - google_has_height         :does element have height?
     - google_text_emphasis      :a list of all emphasis modifiers
     - google_fixed_width_font   :check for fixed width font
