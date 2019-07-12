@@ -7,18 +7,15 @@ def main():
 
     p = argparse.ArgumentParser()
     p.add_argument(
-        "--name",
-        dest="name",
+        "name",
         help="The name of the person whose journal it is",
     )
     p.add_argument(
-        "--input-file",
-        dest="input_file",
+        "input_file",
         help="the path to the .enex file you wish to convert",
     )
     p.add_argument(
-        "--output-dir",
-        dest="output_dir",
+        "output_dir",
         help="the directory where you want the LaTex files to be saved",
     )
 
