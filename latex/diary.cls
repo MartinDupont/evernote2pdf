@@ -7,6 +7,7 @@
 \usepackage{float}
 \usepackage[parfill]{parskip}
 \usepackage[utf8]{inputenc}
+\usepackage{palatino}
 
 \hypersetup{
 colorlinks=true,
@@ -14,6 +15,8 @@ linkcolor=blue,
 filecolor=blue,
 urlcolor=blue,
 }
+
+\usepackage[margin=1.2in]{geometry}
 
 \urlstyle{same}
 
@@ -43,11 +46,13 @@ urlcolor=blue,
 }
 
 \newcommand{\doubledatedsectionupdate}[7]{%
+\begin{samepage}
 \setcounter{chapter}{#1}
 \setcounter{section}{#2}
 \setcounter{subsection}{#3}
 \subsubsection[#7]{#1.#2.#3 #7}%
 \begin{flushright} updated: #4.#5.#6 \end{flushright}
+\end{samepage}
 }
 
 \newcommand{\makeTagFooter}{
@@ -101,4 +106,7 @@ urlcolor=blue,
 
 \end{titlepage}
 
+\shipout\null
+
+\pagenumbering{arabic}% Arabic page numbers (and reset to 1)
 }
