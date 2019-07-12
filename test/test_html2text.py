@@ -59,11 +59,6 @@ def generate_testdata():
             cmdline_args.append("--escape-all")
             func_args = skip
 
-        if base_fn.find("table_bypass") >= 0:
-            module_args["bypass_tables"] = True
-            cmdline_args.append("--bypass-tables")
-            func_args = skip
-
         if base_fn.startswith("table_ignore"):
             module_args["ignore_tables"] = True
             cmdline_args.append("--ignore-tables")
@@ -77,11 +72,6 @@ def generate_testdata():
         if base_fn.startswith("protect_links"):
             module_args["protect_links"] = True
             cmdline_args.append("--protect-links")
-            func_args = skip
-
-        if base_fn.startswith("images_as_html"):
-            module_args["images_as_html"] = True
-            cmdline_args.append("--images-as-html")
             func_args = skip
 
         if base_fn.startswith("images_to_alt"):
@@ -119,11 +109,6 @@ def generate_testdata():
         if base_fn.startswith("pad_table"):
             module_args["pad_tables"] = True
             cmdline_args.append("--pad-tables")
-            func_args = skip
-
-        if base_fn.startswith("wrap_list_items"):
-            module_args["wrap_list_items"] = True
-            cmdline_args.append("--wrap-list-items")
             func_args = skip
 
         if base_fn == "inplace_baseurl_substitution.html":

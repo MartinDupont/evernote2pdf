@@ -51,13 +51,11 @@ class HTML2Tex(HTMLParser.HTMLParser):
         self.td_count = 0
         self.table_start = False
         self.unicode_snob = config.UNICODE_SNOB  # covered in cli
-        self.links_each_paragraph = config.LINKS_EACH_PARAGRAPH
         self.body_width = bodywidth  # covered in cli
         self.skip_internal_links = config.SKIP_INTERNAL_LINKS  # covered in cli
         self.inline_links = config.INLINE_LINKS  # covered in cli
         self.ignore_links = config.IGNORE_ANCHORS  # covered in cli
         self.ignore_images = config.IGNORE_IMAGES  # covered in cli
-        self.images_as_html = config.IMAGES_AS_HTML  # covered in cli
         self.images_to_alt = config.IMAGES_TO_ALT  # covered in cli
         self.images_with_size = config.IMAGES_WITH_SIZE  # covered in cli
         self.ignore_emphasis = config.IGNORE_EMPHASIS  # covered in cli
@@ -78,7 +76,6 @@ class HTML2Tex(HTMLParser.HTMLParser):
         self.use_automatic_links = config.USE_AUTOMATIC_LINKS  # covered in cli
         self.hide_strikethrough = False  # covered in cli
         self.mark_code = config.MARK_CODE
-        self.wrap_list_items = config.WRAP_LIST_ITEMS  # covered in cli
         self.wrap_links = config.WRAP_LINKS  # covered in cli
         self.pad_tables = config.PAD_TABLES  # covered in cli
         self.default_image_alt = config.DEFAULT_IMAGE_ALT  # covered in cli
@@ -537,33 +534,6 @@ class HTML2Tex(HTMLParser.HTMLParser):
                     self.out(" ")
                 self.space = False
 
-            if self.a and (
-                    (self.p_p == 2 and self.links_each_paragraph) or force == "end"
-            ):
-                if force == "end":
-                    self.out("\n")
-
-                newa = []
-                for link in self.a:
-                    if self.outcount > link["outcount"]:
-                        self.out(
-                            "   ["
-                            + str(link["count"])
-                            + "]: "
-                            + urlparse.urljoin(self.baseurl, link["href"])
-                        )
-                        if "title" in link:
-                            self.out(" (" + link["title"] + ")")
-                        self.out("\n")
-                    else:
-                        newa.append(link)
-
-                # Don't need an extra line when nothing was done.
-                if self.a != newa:
-                    self.out("\n")
-
-                self.a = newa
-
             self.p_p = 0
             self.out(data)
             self.outcount += 1
@@ -641,7 +611,7 @@ class HTML2Tex(HTMLParser.HTMLParser):
             self.inline_links = False
         for para in text.split("\n"):
             if len(para) > 0:
-                if not skipwrap(para, False, self.wrap_list_items):
+                if not skipwrap(para, False, True):
                     indent = ""
                     wrapped = wrap(
                         para,

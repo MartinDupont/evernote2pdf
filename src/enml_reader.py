@@ -94,7 +94,6 @@ def enml_to_tex(content, store, pretty=True, header=True):
     :type media_fiter: callable object with prototype: `bool func(hash_str, mime_type)`
     """
     text_maker = html2tex.HTML2Tex()
-    text_maker.images_as_html = True
     for entity, replacement in REPLACEMENTS:
         content = content.replace(entity, replacement)
 

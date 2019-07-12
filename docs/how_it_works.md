@@ -18,7 +18,6 @@ Used to provide various configuration settings to the converter. They are as fol
 
     - UNICODE_SNOB for using unicode
     - ESCAPE_SNOB for escaping every special character
-    - LINKS_EACH_PARAGRAPH for putting links after every paragraph
     - BODY_WIDTH for wrapping long lines
     - SKIP_INTERNAL_LINKS to skip #local-anchor things
     - INLINE_LINKS for formatting images and links
@@ -26,7 +25,6 @@ Used to provide various configuration settings to the converter. They are as fol
     - GOOGLE_LIST_INDENT no of pixels to indent nested lists
     - IGNORE_ANCHORS
     - IGNORE_IMAGES
-    - IMAGES_AS_HTML always generate HTML tags for images; preserves `height`, `width`, `alt` if possible.
     - IMAGES_TO_ALT
     - IMAGES_WITH_SIZE
     - IGNORE_EMPHASIS

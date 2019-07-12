@@ -39,13 +39,6 @@ def main():
         help="wrap links during conversion",
     )
     p.add_argument(
-        "--wrap-list-items",
-        dest="wrap_list_items",
-        action="store_true",
-        default=config.WRAP_LIST_ITEMS,
-        help="wrap list items during conversion",
-    )
-    p.add_argument(
         "--ignore-emphasis",
         dest="ignore_emphasis",
         action="store_true",
@@ -79,16 +72,6 @@ def main():
         action="store_true",
         default=config.IGNORE_IMAGES,
         help="don't include any formatting for images",
-    )
-    p.add_argument(
-        "--images-as-html",
-        dest="images_as_html",
-        action="store_true",
-        default=config.IMAGES_AS_HTML,
-        help=(
-            "Always write image tags as raw html; preserves `height`, `width` and "
-            "`alt` if possible."
-        ),
     )
     p.add_argument(
         "--images-to-alt",
@@ -140,13 +123,6 @@ def main():
         help="hide strike-through text. only relevant when -g is " "specified as well",
     )
     p.add_argument(
-        "--bypass-tables",
-        action="store_true",
-        dest="bypass_tables",
-        default=config.BYPASS_TABLES,
-        help="Format tables in HTML rather than Markdown syntax.",
-    )
-    p.add_argument(
         "--ignore-tables",
         action="store_true",
         dest="ignore_tables",
@@ -183,13 +159,6 @@ def main():
         dest="skip_internal_links",
         default=config.SKIP_INTERNAL_LINKS,
         help="Do not skip internal links",
-    )
-    p.add_argument(
-        "--links-after-para",
-        action="store_true",
-        dest="links_each_paragraph",
-        default=config.LINKS_EACH_PARAGRAPH,
-        help="Put links after each paragraph instead of document",
     )
     p.add_argument(
         "--mark-code",
@@ -251,18 +220,15 @@ def main():
     h.ignore_links = args.ignore_links
     h.protect_links = args.protect_links
     h.ignore_images = args.ignore_images
-    h.images_as_html = args.images_as_html
     h.images_to_alt = args.images_to_alt
     h.images_with_size = args.images_with_size
     h.hide_strikethrough = args.hide_strikethrough
-    h.bypass_tables = args.bypass_tables
     h.ignore_tables = args.ignore_tables
     h.single_line_break = args.single_line_break
     h.inline_links = args.inline_links
     h.unicode_snob = args.unicode_snob
     h.use_automatic_links = args.use_automatic_links
     h.skip_internal_links = args.skip_internal_links
-    h.links_each_paragraph = args.links_each_paragraph
     h.mark_code = args.mark_code
     h.wrap_links = args.wrap_links
     h.wrap_list_items = args.wrap_list_items

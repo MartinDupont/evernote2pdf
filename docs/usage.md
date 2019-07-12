@@ -49,7 +49,6 @@ To customize the options provided by the module the usage is as follows:
     import html2text
     text_maker = html2text.HTML2Text()
     text_maker.ignore_links = True
-    text_maker.bypass_tables = False
     html = function_to_get_some_html()
     text = text_maker.handle(html)
     print(text)
@@ -64,7 +63,6 @@ simple indications of their function.
 
     - UNICODE_SNOB for using unicode
     - ESCAPE_SNOB for escaping every special character
-    - LINKS_EACH_PARAGRAPH for putting links after every paragraph
     - BODY_WIDTH for wrapping long lines
     - SKIP_INTERNAL_LINKS to skip #local-anchor things
     - INLINE_LINKS for formatting images and links
@@ -72,7 +70,6 @@ simple indications of their function.
     - GOOGLE_LIST_INDENT no of pixels to indent nested lists
     - IGNORE_ANCHORS
     - IGNORE_IMAGES
-    - IMAGES_AS_HTML always generate HTML tags for images; preserves `height`, `width`, `alt` if possible.
     - IMAGES_TO_ALT
     - IMAGES_WITH_SIZE
     - IGNORE_EMPHASIS
@@ -94,7 +91,6 @@ simple indications of their function.
     - USE_AUTOMATIC_LINKS to convert <a href='http://xyz'>http://xyz</a> to <http://xyz>
     - MARK_CODE to wrap 'pre' blocks with [code]...[/code] tags
     - WRAP_LINKS to decide if links have to be wrapped during text wrapping (implies INLINE_LINKS = False)
-    - WRAP_LIST_ITEMS to decide if list items have to be wrapped during text wrapping
     - DECODE_ERRORS to handle decoding errors. 'strict', 'ignore', 'replace' are the acceptable values.
     - DEFAULT_IMAGE_ALT takes a string as value and is used whenever an image tag is missing an `alt` value. The default for this is an empty string '' to avoid backward breakage
     - OPEN_QUOTE is the character used to open a quote when replacing the `<q>` tag. It defaults to `"`.

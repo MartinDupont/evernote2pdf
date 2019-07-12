@@ -11,9 +11,6 @@ TABLE_MARKER_FOR_PAD = "special_marker_for_table_padding"
 # corner case formatting issues.
 ESCAPE_SNOB = False
 
-# Put the links after each paragraph instead of at the end.
-LINKS_EACH_PARAGRAPH = False
-
 # Wrap long lines at position. 0 for no wrapping.
 BODY_WIDTH = 78
 
@@ -30,18 +27,8 @@ PROTECT_LINKS = False
 # WRAP_LINKS = True
 WRAP_LINKS = True
 
-# Wrap list items.
-WRAP_LIST_ITEMS = False
-
-# Number of pixels Google indents nested lists
-GOOGLE_LIST_INDENT = 36
-
-# Values Google and others may use to indicate bold text
-BOLD_TEXT_STYLE_VALUES = ("bold", "700", "800", "900")
-
 IGNORE_ANCHORS = False
 IGNORE_IMAGES = False
-IMAGES_AS_HTML = False
 IMAGES_TO_ALT = False
 IMAGES_WITH_SIZE = False
 IGNORE_EMPHASIS = False
@@ -145,8 +132,6 @@ UNIFIABLE = {
     "rlm": "",
 }
 
-# Format tables in HTML rather than Markdown syntax
-BYPASS_TABLES = False
 # Ignore table-related tags (table, th, td, tr) while keeping rows
 IGNORE_TABLES = False
 
