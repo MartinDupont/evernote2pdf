@@ -1,7 +1,7 @@
 import xml.etree.ElementTree as ET
 from src.enml_reader import enml_to_tex, MediaStore
 from shutil import copyfile
-
+import calendar
 
 def get_updated_date_if_exists(child):
     updated = child.find("updated")
@@ -22,6 +22,10 @@ def parse_date_string(date_string):
 
     return year, month, day
 
+def get_month_year(date_string):
+    year = date_string[0:4]
+    month = calendar.month_name[int(date_string[4:6])]
+    return month + ' ' + year
 
 def make_tag_footer(tags):
     if not tags:
@@ -70,6 +74,11 @@ if __name__ == "__main__":
 
     with open("../out/diary.tex", "w") as f:
         f.write(head)
+
+        dates = [child.find("created").text for child in root]
+        oldest = get_month_year(min(dates))
+        newest = get_month_year(max(dates))
+        f.write("\\makeTitlePage{{{}}}{{{}}}{{{}}}\n".format("Martin Dupont", oldest, newest))
 
         for child in root:
             title = make_title(child)

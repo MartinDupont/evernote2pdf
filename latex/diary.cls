@@ -5,7 +5,8 @@
 \usepackage{tocloft}
 \usepackage{hyperref}
 \usepackage{float}
-
+\usepackage[parfill]{parskip}
+\usepackage[utf8]{inputenc}
 
 \hypersetup{
 colorlinks=true,
@@ -61,4 +62,43 @@ urlcolor=blue,
 \else
     \href{#1}{#2}
 \fi
+}
+
+\newcommand{\makeTitlePage}[3]{
+\begin{titlepage} % Suppresses headers and footers on the title page
+
+    \centering % Centre everything on the title page
+
+    \scshape % Use small caps for all text on the title page
+
+    \vspace*{\baselineskip} % White space at the top of the page
+
+    %------------------------------------------------
+    %	Title
+    %------------------------------------------------
+
+    \rule{\textwidth}{1.6pt}\vspace*{-\baselineskip}\vspace*{2pt} % Thick horizontal rule
+    \rule{\textwidth}{0.4pt} % Thin horizontal rule
+
+    \vspace{0.75\baselineskip} % Whitespace above the title
+
+    {Journal: {#1}} % Title
+
+    \vspace{0.75\baselineskip} % Whitespace below the title
+
+    \rule{\textwidth}{0.4pt}\vspace*{-\baselineskip}\vspace{3.2pt} % Thin horizontal rule
+    \rule{\textwidth}{1.6pt} % Thick horizontal rule
+
+    \vspace{2\baselineskip} % Whitespace after the title block
+
+    %------------------------------------------------
+    %	Subtitle
+    %------------------------------------------------
+
+    {#2} - {#3}
+
+    \vspace*{3\baselineskip} % Whitespace under the subtitle
+
+\end{titlepage}
+
 }

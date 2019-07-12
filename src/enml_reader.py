@@ -19,8 +19,8 @@ REPLACEMENTS = [
     ("&amp;apos;", "'"),
     ("&apos;", "'"),
     ("&amp;", "&"),
-    ("&lt;", "<"),
-    ("&gt;", ">"),
+    ("&lt;", "$<$"),
+    ("&gt;", "$>$"),
     ("&laquo;", "<<"),
     ("&raquo;", ">>"),
     ("&#039;", "'"),
@@ -29,7 +29,9 @@ REPLACEMENTS = [
     ("&#8216;", "\'"),
     ("&#8217;", "\'"),
     ("&#9632;", ""),
-    ("&#8226;", "-")]
+    ("&#8226;", "-"),
+    ("%", "\\%")
+]
 
 
 def enml_to_html(content, store, pretty=True, header=True, **kwargs):
@@ -93,11 +95,12 @@ def enml_to_tex(content, store, pretty=True, header=True):
     """
     text_maker = html2tex.HTML2Tex()
     text_maker.images_as_html = True
+    for entity, replacement in REPLACEMENTS:
+        content = content.replace(entity, replacement)
+
 
     html = enml_to_html(content, store, pretty, header, media_filter=images_media_filter).decode('utf-8')
     text = text_maker.handle(html)
-    for entity, replacement in REPLACEMENTS:
-        text = text.replace(entity, replacement)
     return text
 
 
