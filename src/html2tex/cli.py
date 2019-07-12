@@ -60,13 +60,6 @@ def main():
         help="don't include any formatting for links",
     )
     p.add_argument(
-        "--protect-links",
-        dest="protect_links",
-        action="store_true",
-        default=config.PROTECT_LINKS,
-        help="protect links from line breaks surrounding them with angle brackets",
-    )
-    p.add_argument(
         "--ignore-images",
         dest="ignore_images",
         action="store_true",
@@ -89,22 +82,6 @@ def main():
             "Write image tags with height and width attrs as raw html to retain "
             "dimensions"
         ),
-    )
-    p.add_argument(
-        "-d",
-        "--dash-unordered-list",
-        action="store_true",
-        dest="ul_style_dash",
-        default=False,
-        help="use a dash rather than a star for unordered list items",
-    )
-    p.add_argument(
-        "-e",
-        "--asterisk-emphasis",
-        action="store_true",
-        dest="em_style_asterisk",
-        default=False,
-        help="use an asterisk rather than an underscore for emphasized text",
     )
     p.add_argument(
         "-b",
@@ -152,13 +129,6 @@ def main():
         dest="skip_internal_links",
         default=config.SKIP_INTERNAL_LINKS,
         help="Do not skip internal links",
-    )
-    p.add_argument(
-        "--mark-code",
-        action="store_true",
-        dest="mark_code",
-        default=config.MARK_CODE,
-        help="Mark program code blocks with [code]...[/code]",
     )
     p.add_argument(
         "--decode-errors",
@@ -211,7 +181,6 @@ def main():
     h.body_width = args.body_width
     h.ignore_emphasis = args.ignore_emphasis
     h.ignore_links = args.ignore_links
-    h.protect_links = args.protect_links
     h.ignore_images = args.ignore_images
     h.images_to_alt = args.images_to_alt
     h.images_with_size = args.images_with_size
@@ -221,7 +190,6 @@ def main():
     h.inline_links = args.inline_links
     h.unicode_snob = args.unicode_snob
     h.skip_internal_links = args.skip_internal_links
-    h.mark_code = args.mark_code
     h.wrap_links = args.wrap_links
     h.wrap_list_items = args.wrap_list_items
     h.pad_tables = args.pad_tables
