@@ -5,11 +5,11 @@ import re
 import subprocess
 import sys
 
-import src.html2tex as html2tex
-import src.html2tex.utils as utils
+import evernote2pdf.html2tex as html2tex
+import evernote2pdf.html2tex.utils as utils
 import pytest
 
-from src.html2tex import config
+from evernote2pdf.html2tex import config
 
 skip = object()
 

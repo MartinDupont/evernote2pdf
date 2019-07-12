@@ -1,7 +1,7 @@
 import sys
 
-from src.html2tex import config
-from src.html2tex.compat import htmlentitydefs
+from evernote2pdf.html2tex import config
+from evernote2pdf.html2tex.compat import htmlentitydefs
 
 
 def name2cp(k):

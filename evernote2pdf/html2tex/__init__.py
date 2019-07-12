@@ -6,10 +6,10 @@ import re
 import sys
 from textwrap import wrap
 
-from src.html2tex import config
-from src.html2tex.compat import HTMLParser, urlparse
-from src.html2tex.format_latex import make_picture_link, make_bare_image
-from src.html2tex.utils import (
+from evernote2pdf.html2tex import config
+from evernote2pdf.html2tex.compat import HTMLParser, urlparse
+from evernote2pdf.html2tex.format_latex import make_picture_link, make_bare_image
+from evernote2pdf.html2tex.utils import (
     escape_md,
     escape_md_section,
     hn,

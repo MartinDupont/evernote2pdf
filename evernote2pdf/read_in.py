@@ -1,7 +1,8 @@
 import xml.etree.ElementTree as ET
-from src.enml_reader import enml_to_tex, MediaStore
+from evernote2pdf.enml_reader import enml_to_tex, MediaStore
 from shutil import copyfile
 import calendar
+import os
 
 def get_updated_date_if_exists(child):
     updated = child.find("updated")
@@ -64,13 +65,15 @@ def get_template_head_and_foot(path):
     return header, footer
 
 
-def main(name, input_file, output_dir):
+def convert(name, input_file, output_dir):
     tree = ET.parse(input_file)
     root = tree.getroot()
     mediaStore = MediaStore(output_dir)
-    copyfile("../latex/diary.cls", output_dir + "/diary.cls")
+    dirname = os.path.dirname(__file__)
+    source = os.path.join(dirname, "../latex/diary.cls")
+    copyfile(source, output_dir + "/diary.cls")
 
-    head, foot = get_template_head_and_foot("../latex/diary.tex")
+    head, foot = get_template_head_and_foot(os.path.join(dirname, "../latex/diary.tex"))
 
     with open(output_dir + "/diary.tex", "w") as f:
         f.write(head)
@@ -101,4 +104,4 @@ def main(name, input_file, output_dir):
 
 
 if __name__ == "__main__":
-    main("Martin Dupont", "../test/newer_notebook.enex", "../out")
+    convert("Martin Dupont", "../test/newer_notebook.enex", "../out")

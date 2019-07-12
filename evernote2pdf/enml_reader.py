@@ -3,7 +3,7 @@
 """Stole this from: https://github.com/CarlLee/ENML_PY, MIT license applies. """
 import os
 from bs4 import BeautifulSoup
-import html2tex
+import evernote2pdf.html2tex as html2tex
 import hashlib
 import binascii
 

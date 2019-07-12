@@ -1,7 +1,7 @@
 import argparse
 
-from src import HTML2Text, __version__, config
-from src.html2tex.utils import wrap_read, wrapwrite
+from evernote2pdf.html2tex import HTML2Tex, __version__, config
+from evernote2pdf.html2tex.utils import wrap_read, wrapwrite
 
 
 def main():
@@ -173,7 +173,7 @@ def main():
         print(warning)
         raise err
 
-    h = HTML2Text(baseurl=baseurl)
+    h = HTML2Tex(baseurl=baseurl)
     # handle options
     if args.ul_style_dash:
         h.ul_item_mark = "-"
